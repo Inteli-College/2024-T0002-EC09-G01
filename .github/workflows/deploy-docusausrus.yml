@@ -10,9 +10,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+env:
+  NODE_OPTIONS: --max-old-space-size=6144
+
 
 jobs:
   build:
@@ -25,7 +33,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./website
+        working-directory: .
 
     steps:
       - name: Checkout repository
@@ -36,13 +44,14 @@ jobs:
         with:
           node-version: latest
 
-      - name: Install dependencies
+      - name: Install dependencies and build
         run: |
           cd docs
           npm install
 
       - name: Build
         run: |
+          cd docs
           npm run build
           mv build ../build
 
