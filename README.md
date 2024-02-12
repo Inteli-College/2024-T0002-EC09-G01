@@ -39,7 +39,7 @@ Este repositório contém várias pastas e arquivos importantes. Aqui está um r
   [![Button Click]][Link]
 
   [Button Click]: https://img.shields.io/badge/Documentação-37a779?style=for-the-badge
-  [Link]: https://www.inteli.edu.br/
+  [Link]: https://inteli-college.github.io/2024-T0002-EC09-G01/
 
 
 ## 📋 Licença/License
