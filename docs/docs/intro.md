@@ -1,7 +1,7 @@
 ---
-sidebar_position: 1
+id: Intro
 title: Documentação - Grupo 1
-sidebar-position: 1
+sidebar_position: 1
 slug: /
 ---
 
