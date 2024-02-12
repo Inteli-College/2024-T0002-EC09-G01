@@ -1,5 +1,8 @@
 ---
 sidebar_position: 1
+title: Documentação - Grupo 1
+sidebar-position: 1
+slug: /
 ---
 
 # Tutorial Intro
