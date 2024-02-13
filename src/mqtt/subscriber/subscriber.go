@@ -6,7 +6,7 @@ import (
 )
 
 var messagePubHandler MQTT.MessageHandler = func(client MQTT.Client, msg MQTT.Message) {
-	fmt.Printf("Recebido: %s do tópico: %s\n", msg.Payload(), msg.Topic())
+	fmt.Printf("Received: %s from topic: %s\n", msg.Payload(), msg.Topic())
 }
 
 const broker string = "broker.hivemq.com:1883"
@@ -26,6 +26,6 @@ func main() {
 		return
 	}
 
-	fmt.Println("Subscriber está rodando. Pressione CTRL+C para sair.")
+	fmt.Println("Subscriber running...")
 	select {}
 }
