@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+	DefaultClient "mqtt/src/common"
 )
 
 const maxSensorRange = 1.0
 const minSensorRange = 0.03
-
-const broker = "broker.hivemq.com:1883"
-const id = "go-mqtt-sensor"
 
 type Sensor struct {
 	Name        string
@@ -70,7 +68,7 @@ func main() {
 	var sensors []Sensor
 	sensors = append(sensors, *sensor, *sensor2)
 
-	client := CreateClient(broker, id, handler)
+	client := DefaultClient.CreateClient(DefaultClient.Broker, DefaultClient.IdPublisher, DefaultClient.Handler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
@@ -78,7 +76,7 @@ func main() {
 
 	for {
 		for _, sensor := range sensors {
-			
+
 			topic := "sensors/" + sensor.Name
 
 			sensor.Measurement = (rand.Float64() * (maxSensorRange - minSensorRange)) + minSensorRange

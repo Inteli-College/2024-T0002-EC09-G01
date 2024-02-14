@@ -27,7 +27,7 @@ func TestMain(t *testing.T) {
 		json.Unmarshal([]byte(got), &transformed)
 
 		if err != nil {
-			t.Fatalf("Error generating JSON: %v", err)
+			t.Errorf("Error generating JSON: %v", err)
 		}
 
 		want := map[string]interface{}{
@@ -46,15 +46,4 @@ func TestMain(t *testing.T) {
 		}
 
 	})
-}
-
-func TestClient(t *testing.T) {
-	t.Run("Create a Client", func(t *testing.T) {
-		client := CreateClient("broker.hivemq.com:1883", "go-publisher", handler)
-
-		if token := client.Connect(); token.Wait() && token.Error() != nil {
-			panic(token.Error())
-		}
-	})
-
 }
