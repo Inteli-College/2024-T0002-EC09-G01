@@ -14,32 +14,41 @@ O código fonte da solução pode ser encontrado no [repositório do grupo no Gi
 
 ## Publisher
 
-Para facilitar o teste com vários sensores simulados, abstraímos uma estrutura de dados que contém as principais informações de um sensor, como nome, latitude, longitude, medição e frequência, além do atributo para permitir a conexão com o broker. Isso simplifica a criação de novas instâncias para testes.
+Para facilitar o teste com vários sensores simulados, abstraímos uma estrutura de dados que contém as principais informações de um sensor, como nome, latitude, longitude, medição, frequência, e unidade de medida. Isso simplifica a criação de novas instâncias para testes.
 
 ```go
 type Sensor struct {
-	name        string
-	latitude    float64
-	longitude   float64
-	measurement float64
-	rate        int
-	mqtt.Client
+	Name        string
+	Latitude    float64
+	Longitude   float64
+	Measurement float64
+	Rate        int
+	Unit        string
 }
 ```
 
-A comunicação é então iniciada com um broker público (nesse exemplo, optamos por utilizar o hivemq), e as leituras do sensor são enviadas. Note que são gerados valores aleatórios entre 1 e 5 para simular uma amplitude de leitura do sensor para uma determinada grandeza:
+A comunicação é então iniciada com um broker público (nesse exemplo, optamos por utilizar o hivemq), e as leituras do sensor são enviadas. Note que são gerados valores aleatórios entre 0.03 e 1 para simular uma amplitude de leitura do sensor para uma determinada grandeza:
 
 ```go
-topic := "sensors/" + sensor.name
-
 for {
-    sensor.measurement = rand.Float64()*5
-    payload := strconv.FormatFloat(sensor.measurement, 'f', 2, 64)
-    token := sensor.Publish(topic, 0, false, payload)
-    token.Wait()
-    fmt.Printf("Published message: %s\n", payload)
-    time.Sleep(time.Duration(sensor.rate) * time.Second)
-}
+		for _, sensor := range sensors {
+			
+			topic := "sensors/" + sensor.Name
+
+			sensor.Measurement = (rand.Float64() * (maxSensorRange - minSensorRange)) + minSensorRange
+
+			payload, _ := sensor.ToJSON()
+
+			token := client.Publish(topic, 0, false, payload)
+
+			token.Wait()
+
+			fmt.Printf("Published message: %s\n", payload)
+
+			time.Sleep(time.Duration(sensor.Rate) * time.Second)
+
+		}
+	}
 ```
 
 ## Subscriber
