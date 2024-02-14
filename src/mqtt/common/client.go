@@ -1,4 +1,4 @@
-package main
+package common
 
 import (
 	"fmt"
@@ -6,7 +6,11 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-var handler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+const Broker = "broker.hivemq.com:1883"
+const IdPublisher = "go-mqtt-publisher"
+const IdSubscriber = "go-mqtt-subscriber"
+
+var Handler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 	fmt.Printf("Received: %s on topic %s\n", msg.Payload(), msg.Topic())
 	return
 }
