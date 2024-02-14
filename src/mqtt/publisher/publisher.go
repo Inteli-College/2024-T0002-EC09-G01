@@ -1,21 +1,24 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand"
-	"strconv"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
+const maxSensorRange = 1.0
+const minSensorRange = 0.03
+
 type Sensor struct {
-	name        string
-	latitude    float64
-	longitude   float64
-	measurement float64
-	rate        int
-	mqtt.Client
+	Name        string
+	Latitude    float64
+	Longitude   float64
+	Measurement float64
+	Rate        int
+	Unit        string
 }
 
 func NewSensor(
@@ -23,17 +26,17 @@ func NewSensor(
 	latitude float64,
 	longitude float64,
 	measurement float64,
-	rate int) *Sensor {
+	rate int,
+	unit string) *Sensor {
 
 	s := &Sensor{
-		name:        name,
-		latitude:    latitude,
-		longitude:   longitude,
-		measurement: measurement,
-		rate:        rate,
+		Name:        name,
+		Latitude:    latitude,
+		Longitude:   longitude,
+		Measurement: measurement,
+		Rate:        rate,
+		Unit:        unit,
 	}
-
-	s.Client = mqtt.NewClient(mqtt.NewClientOptions())
 
 	return s
 
@@ -43,25 +46,60 @@ func (s *Sensor) OnMessageReceived(client mqtt.Client, msg mqtt.Message) {
 	fmt.Printf("Received: %s on topic %s\n", msg.Payload(), msg.Topic())
 }
 
+func (s *Sensor) ToJSON() (string, error) {
+	jsonData, err := json.Marshal(s)
+	if err != nil {
+		return "", err
+	}
+	return string(jsonData), nil
+}
+
 func main() {
-	sensor := NewSensor("SPS30", 51.0, 0.0, 0.0, 1)
+
+	// Creating an Instance for SPS30 sensor
+	// Which can read Mass Concentration within an area
+	// With a 1s rate
+
+	sensor := NewSensor("SPS30", 51.0, 0.0, 0.0, 1, "μg/m³")
+
+	// Creating an Instance for MiCS-6814 sensor
+	// Which can read substance concentration
+	// With a 1s rate
+
+	sensor2 := NewSensor("MiCS-6814", 10.0, 1.0, 0.0, 1, "NO2 - ppm")
+
+	// Creating an Array of Sensors
+
+	var sensors []Sensor
+	sensors = append(sensors, *sensor, *sensor2)
+
 	opts := mqtt.NewClientOptions().AddBroker("broker.hivemq.com:1883")
 	opts.SetClientID("go-mqtt-sensor")
 	opts.SetDefaultPublishHandler(sensor.OnMessageReceived)
 
-	sensor.Client = mqtt.NewClient(opts)
-	if token := sensor.Connect(); token.Wait() && token.Error() != nil {
+	client := mqtt.NewClient(opts)
+
+	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
 
-	topic := "sensors/" + sensor.name
-
 	for {
-		sensor.measurement = rand.Float64()*5
-		payload := strconv.FormatFloat(sensor.measurement, 'f', 2, 64)
-		token := sensor.Publish(topic, 0, false, payload)
-		token.Wait()
-		fmt.Printf("Published message: %s\n", payload)
-		time.Sleep(time.Duration(sensor.rate) * time.Second)
+		for _, sensor := range sensors {
+			
+			topic := "sensors/" + sensor.Name
+
+			sensor.Measurement = (rand.Float64() * (maxSensorRange - minSensorRange)) + minSensorRange
+
+			payload, _ := sensor.ToJSON()
+
+			token := client.Publish(topic, 0, false, payload)
+
+			token.Wait()
+
+			fmt.Printf("Published message: %s\n", payload)
+
+			time.Sleep(time.Duration(sensor.Rate) * time.Second)
+
+		}
 	}
 }

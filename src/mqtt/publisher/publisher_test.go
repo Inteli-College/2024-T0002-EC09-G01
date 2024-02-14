@@ -32,8 +32,8 @@ func structFieldsEqual(a, b interface{}) bool {
 
 func TestNewSensor(t *testing.T) {
 	t.Run("Create new Sensor", func(t *testing.T) {
-		sensor := NewSensor("Sensor1", 51.0, 0.0, 0.0, 60)
-		compare := Sensor{name: "Sensor1", latitude: 51.0, longitude: 0.0, measurement: 0.0, rate: 60}
+		sensor := NewSensor("Sensor1", 51.0, 0.0, 0.0, 60, "μg/m³")
+		compare := Sensor{Name: "Sensor1", Latitude: 51.0, Longitude: 0.0, Measurement: 0.0, Rate: 60, Unit: "μg/m³"}
 
 		if structFieldsEqual(sensor, compare) {
 			t.Errorf("The sensor was not created successfully...")
