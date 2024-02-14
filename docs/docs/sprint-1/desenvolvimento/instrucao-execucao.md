@@ -48,7 +48,7 @@ cd publisher
 2. Rode o comando:
    
 ```bash
-go run publisher.go
+go run .
 ```
 
 ### Subscriber:
@@ -58,7 +58,7 @@ cd subscriber
 ```
 2. Rode o comando:
 ```bash
-go run subscriber.go
+go run .
 ```
 
 ### Observações

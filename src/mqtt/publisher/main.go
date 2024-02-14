@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
-
-	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 const maxSensorRange = 1.0
 const minSensorRange = 0.03
+
+const broker = "broker.hivemq.com:1883"
+const id = "go-mqtt-sensor"
 
 type Sensor struct {
 	Name        string
@@ -42,10 +43,6 @@ func NewSensor(
 
 }
 
-func (s *Sensor) OnMessageReceived(client mqtt.Client, msg mqtt.Message) {
-	fmt.Printf("Received: %s on topic %s\n", msg.Payload(), msg.Topic())
-}
-
 func (s *Sensor) ToJSON() (string, error) {
 	jsonData, err := json.Marshal(s)
 	if err != nil {
@@ -73,11 +70,7 @@ func main() {
 	var sensors []Sensor
 	sensors = append(sensors, *sensor, *sensor2)
 
-	opts := mqtt.NewClientOptions().AddBroker("broker.hivemq.com:1883")
-	opts.SetClientID("go-mqtt-sensor")
-	opts.SetDefaultPublishHandler(sensor.OnMessageReceived)
-
-	client := mqtt.NewClient(opts)
+	client := CreateClient(broker, id, handler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
