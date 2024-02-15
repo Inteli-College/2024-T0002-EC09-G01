@@ -5,7 +5,7 @@ on:
     branches:
       - "dev"
     paths:
-      - "Exemplos/E02/goTdd/**"
+      - "./src/mqtt/**"
 
 jobs:
   test:
