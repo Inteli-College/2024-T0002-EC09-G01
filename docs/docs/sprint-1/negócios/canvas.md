@@ -77,3 +77,4 @@ Esse quadro descreve as partes do produto que geram benefícios ou surpreeendem 
 
 ## Quadro completo 
 <img src={require('/img/canvas-completo.png').default} width='100%'/>
+
