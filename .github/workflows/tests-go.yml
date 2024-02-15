@@ -1,0 +1,42 @@
+name: Test Go TDD
+
+on:
+  push:
+    branches:
+      - "mqtt"
+      - "main"
+    paths:
+      - "./src/mqtt/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: "./src/mqtt/"
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+      - name: Get dependencies
+        run: go mod tidy
+      - name: Test client
+        run: | 
+          cd common
+          go test -v --cover .
+      
+      - name: Test client
+        run: | 
+          cd ../publisher
+          go test -v --cover .
+      
+      - name: Test subscriber
+        run: | 
+          cd ../subscriber
+          go test -v --cover .
+      
+
