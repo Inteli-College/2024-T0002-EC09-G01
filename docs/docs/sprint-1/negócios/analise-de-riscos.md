@@ -10,6 +10,18 @@ A matriz de riscos é uma ferramenta visual que auxilia as organizações na ide
 
 <img src="https://github.com/Inteli-College/2024-T0002-EC09-G01/blob/docs/analise_de_riscos/docs/static/img/Risk%20Assessment%20Template.jpg" />
 
+### Legenda:
+1. Usuario admin não funcionar corretamente
+2. Exibição dos dados na dashboard não ser em tempo real
+3. Falha por conta de alto volume de dados
+4. Falha no armazenamento dos dados
+5. Gestão eficiente da equipe
+6. Falha de connexão TCP/IP do protocolo MQTT
+7. Falha no processo de coleta dos dados
+8. Falha de conexão de rede
+9. Vazamento de dados sensíveis
+10. Falha nos sensores físicos
+
 ## Mitigação de riscos
 A mitigação de riscos refere-se ao processo de minimizar ou controlar os efeitos adversos de eventos incertos que podem impactar a realização dos objetivos da empresa.
 
