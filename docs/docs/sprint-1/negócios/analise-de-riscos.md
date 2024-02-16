@@ -8,7 +8,7 @@ A análise de riscos é um processo fundamental para identificar, avaliar e miti
 ## Matriz de riscos
 A matriz de riscos é uma ferramenta visual que auxilia as organizações na identificação, avaliação e priorização de diferentes tipos de riscos que podem afetar suas operações. Essa matriz é uma representação gráfica que organiza os riscos com base em sua probabilidade de ocorrência e no impacto que podem ter nos objetivos da empresa.
 
-<img src="https://github.com/Inteli-College/2024-T0002-EC09-G01/blob/docs/analise_de_riscos/docs/static/img/Risk%20Assessment%20Template.jpg">
+<img src="https://github.com/Inteli-College/2024-T0002-EC09-G01/blob/docs/analise_de_riscos/docs/static/img/Risk%20Assessment%20Template.jpg"> <\img>
 
 ## Mitigação de riscos
 A mitigação de riscos refere-se ao processo de minimizar ou controlar os efeitos adversos de eventos incertos que podem impactar a realização dos objetivos da empresa.
