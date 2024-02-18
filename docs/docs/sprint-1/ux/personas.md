@@ -8,9 +8,11 @@ As personas referem-se à criação de perfis fictícios que representam segment
 ## Persona do Usuário Administrador
 Essa persona, representada por Ana, oferece uma compreensão mais aprofundada do usuário administrador no contexto de gerenciamento da dashboard, ajudando a controlar dados, ferramentas ou usuários cadastrados.
 
-<img src= "https://github.com/Inteli-College/2024-T0002-EC09-G01/blob/docs/ux/docs/static/img/PersonasAdm.jpg"/>
+<img src={require('/img/PersonasAdm.jpg').default} width='100%'/>
+<sub>Persona Administradora - Autoria própria.</sub>
 
 ## Persona do Usuário Regular
 Essa persona, representada por Renata, oferece uma compreensão mais aprofundada do cidadão comum que quer ter ciência das estatíscas referentes a sua cidade, ou formas de adotar uma vida mais sustentável.
 
-<img src= "https://github.com/Inteli-College/2024-T0002-EC09-G01/blob/docs/ux/docs/static/img/PersonasUser.jpg"/>
+<img src={require('/img/PersonasUser.jpg').default} width='100%'/>
+<sub>Persona Usuário - Autoria própria.</sub>
