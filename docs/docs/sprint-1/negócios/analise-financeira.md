@@ -115,8 +115,7 @@ Para o desenvolvimento dessa análise financeira foi pensado primeiro um custo d
       <td>R$11.232,00</td>
       <td>R$56.160,00</td>
     </tr>
-       </tr>
-      <tr>
+    <tr>
       <td>PO - pleno</td>
       <td>5</td>
       <td>
@@ -127,7 +126,7 @@ Para o desenvolvimento dessa análise financeira foi pensado primeiro um custo d
       <td>R$12.250,00</td>
       <td>R$49.000,00 Obs: Este custo foi dividido em 3, considerando que um PO pode atuar minimamente em 3 projetos simultaneamente</td>
     </tr>
-    </tbodt>
+  </tbody>
   <tr>
     <td colspan="6">Somatório</td>
     <td>$1.024.010,00</td>
@@ -179,6 +178,7 @@ Para o desenvolvimento dessa análise financeira foi pensado primeiro um custo d
       <td>R$4.000,00</td>
       <td>R$40.000,00</td>
     </tr>
+  </tbody>
   <tr>
     <td colspan="5">Somatório</td>
     <td>43.485,40</td>
@@ -211,6 +211,7 @@ Para o desenvolvimento dessa análise financeira foi pensado primeiro um custo d
       <td>12</td>
       <td>R$3000</td>
     </tr>
+  </tbody>
 </table>
 
 ## Custos operacional
@@ -254,6 +255,8 @@ O custo operacional foi pensado no custo anual de manutenção do projeto.
       <td>Serviço da aws para ospedar o tráfego de dados</td>
       <td>R$3000,00</td>
     </tr>
+  </tbody>
+  <tr>
     <td colspan="6">Somatório</td>
     <td>$80.500,00</td>
   </tr>
