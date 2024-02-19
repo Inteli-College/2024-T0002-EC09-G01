@@ -12,8 +12,8 @@ Bem vindo a nossa documentação! Esta é a documentação do SmarTopia, feita p
 Clique nos nomes para acessar
 - [Emanuele Morais](https://www.linkedin.com/in/emanuele-morais/)
 - [Felipe Campos](https://www.linkedin.com/in/felipe-pereira-campos-250aa2231)
-- [Felipe Leão](http://www.linkedin.com/in/felipe-hm-le%C3%A3o)
-- [Filipi Kikuchi](http://www.linkedin.com/in/filipi-kikuchi-1811a9213)
+- [Felipe Leão](https://www.linkedin.com/in/felipe-hm-le%C3%A3o)
+- [Filipi Kikuchi](https://www.linkedin.com/in/filipi-kikuchi-1811a9213)
 - Igor Garcia
 - [Luca Sarhan](https://www.linkedin.com/in/luca-giberti-63a4ab231/)
 - [Luana Parra](https://www.linkedin.com/in/luana-dinamarca-parra/)
