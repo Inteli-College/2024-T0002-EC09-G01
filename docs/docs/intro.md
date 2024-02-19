@@ -5,46 +5,25 @@ sidebar_position: 1
 slug: /
 ---
 
-# Tutorial Intro
+# Introdução
+Bem vindo a nossa documentação! Esta é a documentação do SmarTopia, feita pelo Grupo 1. Ela foi dividida por Sprints e, para acessá-la, basta navegar pela barra lateral do site! 
 
-Let's discover **Docusaurus in less than 5 minutes**.
+## Integrantes
+Clique nos nomes para acessar
+- [Emanuele Morais](https://www.linkedin.com/in/emanuele-morais/)
+- [Felipe Campos](www.linkedin.com/in/felipe-pereira-campos-250aa2231)
+- [Felipe Leão](http://www.linkedin.com/in/felipe-hm-le%C3%A3o)
+- [Filipi Kikuchi](http://www.linkedin.com/in/filipi-kikuchi-1811a9213)
+- Igor Garcia
+- [Luca Sarhan](https://www.linkedin.com/in/luca-giberti-63a4ab231/)
+- [Luana Parra](https://www.linkedin.com/in/luana-dinamarca-parra/)
+- [Rafael Katalan](https://www.linkedin.com/in/rafael-katalan/)
 
-## Getting Started
 
-Get started by **creating a new site**.
+## Contexto do Problema
+A Prodam nos trouxe um grande problema da realidade urbana: a poluição atmosférica. Esse problema, apesar de muitas vezes invisível, acomete a saúde dos cidadãos dentro de curto à longo prazo. Além dos danos ao bem estar da população, esse projeto visa, por meio da sensores simulados, obter dados de outros aspectos do ambiente urbano que tem sido afetada e remetem a problemas do meio ambiente: ruído excessivo, a falta de luminosidade, a má gestão de resíduos e a escassez de informações sobre a umidade do solo. As situações citadas configuram-se desafios pouco considerados, mas que ainda afetam a vida urbana.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+Portanto, evidencia-se uma necessidade de observar, estudar e explorar essa realidade, a fim de entender melhor seus impactos e origem.
 
-### What you'll need
-
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+## Solução
+A fim de aprofundar o entendimento da realidade descrita no tópico anterior, será desenvolvido um dashboard, que será diretamente munido de dados provindos de um server MQTT, no qual um broker irá se comunicar com sensores simulados. A escolha desse sistema se deve a necessidade de comunicação constante com os sensores, de modo que a maior virtude a ser contemplada nesse sistema é a garantia de que cliente e servidor conseguem se contactar, por conseguinte garantindo feedback, ao usuário, da condição ambiental à todo e qualquer momento. 
