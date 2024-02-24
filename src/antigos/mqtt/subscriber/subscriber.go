@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	DefaultClient "mqtt/src/common"
+	DefaultClient "2024-T0002-EC09-G01/src/antigos/mqtt/common"
 )
 
 func main() {
