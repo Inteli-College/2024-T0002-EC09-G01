@@ -1,9 +1,7 @@
 package mics6814
 
 import (
-	"math"
-	"math/rand"
-	"time"
+	Common "2024-T0002-EC09-G01/src/internal/common"
 )
 
 type GasesValues struct {
@@ -23,12 +21,7 @@ type SensorConfig struct {
 	GasesValues	 GasesValues `json:"gases-values"`
 }
 
-type MaxMin struct {
-	MaxValue float64 `json:"max_value"`
-	MinValue float64 `json:"min_value"`
-}
-
-var gasesRange = map[string]MaxMin{
+var gasesRange = map[string]Common.MaxMin{
 	"carbon_monoxide":  {1, 1000},
 	"nitrogen_dioxide": {0.05, 10},
 	"ethanol":          {10, 500},
@@ -39,26 +32,16 @@ var gasesRange = map[string]MaxMin{
 	"iso_butane":       {1001, 9999}, // ">1000 ppm"
 }
 
-func RandomValues(gas string) float64 {
-	rand.Seed(time.Now().UnixNano()) // Inicializa a semente do gerador de números aleatórios
-
-	maxValue := gasesRange[gas].MaxValue
-	minValue := gasesRange[gas].MinValue
-	value := rand.Float64()*(maxValue-minValue) + minValue
-
-	return math.Round(value*100) / 100
-}
-
 func CreateGasesValues() SensorConfig {
 	gasesData := GasesValues{
-		CarbonMonoxide:  RandomValues("carbon_monoxide"),
-		NitrogenDioxide: RandomValues("nitrogen_dioxide"),
-		Ethanol:         RandomValues("ethanol"),
-		Hydrogen:        RandomValues("hydrogen"),
-		Ammonia:         RandomValues("ammonia"),
-		Methane:         RandomValues("methane"),
-		Propane:         RandomValues("propane"),
-		IsoButane:       RandomValues("iso_butane"),
+		CarbonMonoxide:  Common.RandomValues(gasesRange, "carbon_monoxide"),
+		NitrogenDioxide: Common.RandomValues(gasesRange, "nitrogen_dioxide"),
+		Ethanol:         Common.RandomValues(gasesRange, "ethanol"),
+		Hydrogen:        Common.RandomValues(gasesRange, "hydrogen"),
+		Ammonia:         Common.RandomValues(gasesRange, "ammonia"),
+		Methane:         Common.RandomValues(gasesRange, "methane"),
+		Propane:         Common.RandomValues(gasesRange, "propane"),
+		IsoButane:       Common.RandomValues(gasesRange, "iso_butane"),
 	}
 	sensorData := SensorConfig{
 		Sensor: "MiCS-6814",
@@ -67,8 +50,3 @@ func CreateGasesValues() SensorConfig {
 	}	
 	return sensorData
 }
-
-// func main() {
-// 	data := CreateGasesValues()
-// 	fmt.Print(data)
-// }
