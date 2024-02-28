@@ -41,12 +41,16 @@ func ControllerRadiation(id int) {
 
 	for {
 
-		token := client.Publish(fmt.Sprintf("sensors/radiation/%s", strconv.Itoa(id)), 1, false, payload)
-		token.Wait()
-		token.Wait()
+		if client.IsAuthorized("sensors", 1) {
+			token := client.Publish(fmt.Sprintf("sensors/radiation/%s", strconv.Itoa(id)), 1, false, payload)
+			token.Wait()
+			token.Wait()
 
-		fmt.Printf("Published message in %s: %s\n", fmt.Sprintf("sensors/radiation/%s", strconv.Itoa(id)), payload)
-
+			fmt.Printf("Published message in %s: %s\n", fmt.Sprintf("sensors/radiation/%s", strconv.Itoa(id)), payload)
+		} else {
+			fmt.Println("Client not authorized.")
+		}
+		
 		time.Sleep(2 * time.Second)
 	}
 }

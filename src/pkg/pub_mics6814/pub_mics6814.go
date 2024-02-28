@@ -25,7 +25,6 @@ func (s *SendGasesData) ToJSON() (string, error) {
 
 func ControllerGases(id int) {
 
-
 	client := DefaultClient.CreateClient(DefaultClient.Broker, fmt.Sprintf("publisher-mics6814-%s", strconv.Itoa(id)), DefaultClient.Handler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
@@ -41,11 +40,15 @@ func ControllerGases(id int) {
 
 	for {
 
-		token := client.Publish(fmt.Sprintf("sensors/gases/%s", strconv.Itoa(id)), 1, false, payload)
-		token.Wait()
-		token.Wait()
+		if client.IsAuthorized("sensors", 1) {
+			token := client.Publish(fmt.Sprintf("sensors/gases/%s", strconv.Itoa(id)), 1, false, payload)
+			token.Wait()
+			token.Wait()
 
-		fmt.Printf("Published message in %s: %s\n", fmt.Sprintf("sensors/gases/%s", strconv.Itoa(id)), payload)
+			fmt.Printf("Published message in %s: %s\n", fmt.Sprintf("sensors/gases/%s", strconv.Itoa(id)), payload)
+		} else {
+			fmt.Println("Client not authorized.")
+		}
 
 		time.Sleep(2 * time.Second)
 	}
