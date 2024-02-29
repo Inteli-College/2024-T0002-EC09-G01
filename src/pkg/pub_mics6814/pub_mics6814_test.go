@@ -1,4 +1,4 @@
-package controller
+package pub_mics6814
 
 import (
 	DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
@@ -15,7 +15,7 @@ func TestController(t *testing.T) {
 
 	var messageChannel = make(chan mqtt.message)
 	t.Run("TestPublishFields", func(t *testing.T) {
-		client.Subscribe("sensors", 1, func(client mqtt.Client, message mqtt.message) {
+		client.Subscribe("sensors/gases/+", 1, func(client mqtt.Client, message mqtt.message) {
 			messageChannel <- message
 		})
 	})
