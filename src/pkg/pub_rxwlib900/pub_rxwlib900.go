@@ -2,10 +2,8 @@ package pub_rxwlib900
 
 import (
 	RXWLIB900 "2024-T0002-EC09-G01/src/internal/rxwlib900"
-	// DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
 	"encoding/json"
 	"fmt"
-	// "go/types"
 	"strconv"
 	"time"
 )

@@ -16,11 +16,7 @@ func main() {
 		go func(id int) {
 			defer wg.Done()
 			Controller.Controller(id)
-		}(i)
-		// go func(id int) {
-		// 	defer wg.Done()
-		// 	RXWLIB900.ControllerRadiation(id)
-		// }(i)
+		}(i)	
 	}
 
 	wg.Wait()
