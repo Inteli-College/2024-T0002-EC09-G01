@@ -2,7 +2,6 @@ package pub_mics6814
 
 import (
 	MICS6814 "2024-T0002-EC09-G01/src/internal/mics6814"
-	// DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
 	"encoding/json"
 	"fmt"
 	"strconv"

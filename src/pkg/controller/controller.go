@@ -15,10 +15,10 @@ const (
 	radiationSensorType = 1
 )
 
-var topics = [2]string{"gases","radiation"}
+var topics = [2]string{"gases", "radiation"}
 
 func Topic(sensorType int, id int) string {
-	
+
 	typeOfSensor := topics[sensorType]
 	topic := fmt.Sprintf("sensor/%s/%s", typeOfSensor, strconv.Itoa(id))
 	return topic
@@ -34,19 +34,20 @@ func Payload(sensorType int, id int) string {
 }
 
 func Controller(id int) {
-	client := DefaultClient.CreateClient(DefaultClient.Broker, fmt.Sprintf("publisher-rxwlib900-%s", strconv.Itoa(id)), DefaultClient.Handler)
+	client := DefaultClient.CreateClient(DefaultClient.Broker, fmt.Sprintf("publisher-%s", strconv.Itoa(id)), DefaultClient.Handler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
 
 	for {
-		for sensorType := 0; sensorType <= len(topics); sensorType++ {
+		for sensorType := 0; sensorType < len(topics); sensorType++ {
 
 			var topic string
 			var payload string
 
 			switch sensorType {
+
 			case gasesSensorType:
 				topic = Topic(sensorType, id)
 				payload = Payload(sensorType, id)
@@ -57,7 +58,7 @@ func Controller(id int) {
 
 			token := client.Publish(topic, 1, false, payload)
 			token.Wait()
-
+			
 			fmt.Printf("Published message in %s: %s\n", topic, payload)
 		}
 
