@@ -1,64 +1,67 @@
 package controller
 
 import (
-	MICS6814 "2024-T0002-EC09-G01/src/internal/mics6814"
-	RXWLIB900 "2024-T0002-EC09-G01/src/internal/rxwlib900"
-	DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
-	"encoding/json"
 	"fmt"
-	"math/rand"
+	"strconv"
 	"time"
+
+	DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
+	pub_mics6814 "2024-T0002-EC09-G01/src/pkg/pub_mics6814"
+	pub_rxwlib900 "2024-T0002-EC09-G01/src/pkg/pub_rxwlib900"
 )
 
-type SendData struct {
-	Identifier    int                    `json:"identifier"`
-	Latitude      float64                `json:"latitude"`
-	Longitude     float64                `json:"longitude"`
-	CurrentTime   time.Time              `json:"current_time"`
-	GasesData     MICS6814.SensorConfig  `json:"gases-values"`
-	RadiationData RXWLIB900.SensorConfig `json:"radiation-values"`
+const (
+	gasesSensorType     = 0
+	radiationSensorType = 1
+)
+
+var topics = [2]string{"gases", "radiation"}
+
+func Topic(sensorType int, id int) string {
+
+	typeOfSensor := topics[sensorType]
+	topic := fmt.Sprintf("sensor/%s/%s", typeOfSensor, strconv.Itoa(id))
+	return topic
 }
 
-func RandomValues() float64 {
-	rand.Seed(time.Now().UnixNano())
-	return rand.Float64() * 100
-}
-
-func (s *SendData) ToJSON() (string, error) {
-	jsonData, err := json.Marshal(s)
-	if err != nil {
-		return "", err
+func Payload(sensorType int, id int) string {
+	if sensorType == gasesSensorType {
+		return pub_mics6814.CreatePayloadGases(id)
+	} else if sensorType == radiationSensorType {
+		return pub_rxwlib900.CreatePayloadRadiation(id)
 	}
-	return string(jsonData), nil
+	return "No messaeg received"
 }
 
 func Controller(id int) {
-
-	client := DefaultClient.CreateClient(DefaultClient.Broker, DefaultClient.IdPublisher, DefaultClient.Handler)
+	client := DefaultClient.CreateClient(DefaultClient.Broker, fmt.Sprintf("publisher-%s", strconv.Itoa(id)), DefaultClient.Handler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
 
-	senddata := SendData{
-		Identifier:    id,
-		Latitude:      RandomValues(),
-		Longitude:     RandomValues(),
-		CurrentTime:   time.Now(),
-		GasesData:     MICS6814.CreateGasesValues(),
-		RadiationData: RXWLIB900.CreateGasesValues(),
-	}
-
-	payload, _ := senddata.ToJSON()
-
 	for {
+		for sensorType := 0; sensorType < len(topics); sensorType++ {
 
-		token := client.Publish("sensors", 0, false, payload)
-		token.Wait()
-		token.Wait()
+			var topic string
+			var payload string
 
-		fmt.Printf("Published message: %s\n", payload)
+			switch sensorType {
 
-		time.Sleep(1 * time.Second)
+			case gasesSensorType:
+				topic = Topic(sensorType, id)
+				payload = Payload(sensorType, id)
+			case radiationSensorType:
+				topic = Topic(sensorType, id)
+				payload = Payload(sensorType, id)
+			}
+
+			token := client.Publish(topic, 1, false, payload)
+			token.Wait()
+			
+			fmt.Printf("Published message in %s: %s\n", topic, payload)
+		}
+
+		time.Sleep(2 * time.Second)
 	}
 }
