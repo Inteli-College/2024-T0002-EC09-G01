@@ -1,9 +1,7 @@
 package rxwlib900
 
 import (
-	"math"
-	"math/rand"
-	"time"
+	Common "2024-T0002-EC09-G01/src/internal/common"
 )
 
 type RadiationValues struct {
@@ -16,28 +14,13 @@ type SensorConfig struct {
 	RadiationValues RadiationValues `json:"radiation-values"`
 }
 
-type MaxMin struct {
-	MaxValue float64 `json:"max_value"`
-	MinValue float64 `json:"min_value"`
-}
-
-var gasesRange = map[string]MaxMin{
+var radiationRange = map[string]Common.MaxMin{
 	"radiation": {1, 1280},
-}
-
-func RandomValues(gas string) float64 {
-	rand.Seed(time.Now().UnixNano()) // Inicializa a semente do gerador de números aleatórios
-
-	maxValue := gasesRange[gas].MaxValue
-	minValue := gasesRange[gas].MinValue
-	value := rand.Float64()*(maxValue-minValue) + minValue
-
-	return math.Round(value*100) / 100
 }
 
 func CreateGasesValues() SensorConfig {
 	radiationData := RadiationValues{
-		Radiation: RandomValues("radiation"),
+		Radiation: Common.RandomValues(radiationRange, "radiation"),
 	}
 	sensorData := SensorConfig{
 		Sensor:          "RXWLIB900",
@@ -46,7 +29,3 @@ func CreateGasesValues() SensorConfig {
 	}
 	return sensorData
 }
-
-// func main() {
-// 	fmt.Println(CreateGasesValues())
-// }
