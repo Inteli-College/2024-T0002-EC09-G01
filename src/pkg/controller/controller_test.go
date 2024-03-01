@@ -2,12 +2,29 @@ package controller
 
 import (
 	DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
+	publisher "2024-T0002-EC09-G01/src/pkg/publisher"
+	subscriber "2024-T0002-EC09-G01/src/pkg/subscriber"
 	"fmt"
-	"math/rand/v2"
-	"testing"
-
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	// "sync"
+	"regexp"
+	"testing"
 )
+
+func ReturnRegex(topic string) *regexp.Regexp {
+	var re *regexp.Regexp
+	switch {
+	case topic == "sensor/gases":
+		regex := `^\{"packet-id":\d+,"topic-name":"sensor\/gases\/\d+","qos":\d+,"retain-flag":(?:true|false),"payload":\{"current_time":"[^"]+","gases-values":\{"sensor":"[^"]+","unit":"[^"]+","gases-values":\{"carbon_monoxide":\d+\.\d+,"nitrogen_dioxide":\d+\.\d+,"ethanol":\d+\.\d+,"hydrogen":\d+\.\d+,"ammonia":\d+\.\d+,"methane":\d+\.\d+,"propane":\d+\.\d+,"iso_butane":\d+\.\d+\}\}\},"duplicated-flag":(?:true|false)\}$`
+		re = regexp.MustCompile(regex)
+	case topic == "sensor/radiation":
+		regex := `^\{"packet-id":\d+,"topic-name":"sensor\/radiation\/\d+","qos":\d+,"retain-flag":(?:true|false),"payload":\{"current_time":"[^"]+","radiation-values":\{"sensor":"[^"]+","unit":"[^"]+","radiation-values":\{"radiation":\d+\.\d+\}\}\},"duplicated-flag":(?:true|false)\}$`
+
+		re = regexp.MustCompile(regex)
+	}
+	return re
+
+}
 
 func TestController(t *testing.T) {
 
@@ -17,39 +34,20 @@ func TestController(t *testing.T) {
 		panic(token.Error())
 	}
 
-	var messageChannel = make(chan mqtt.Message)
 	t.Run("TestPublishFields", func(t *testing.T) {
 
-		client.Subscribe("sensors/+/+", 1, func(client mqtt.Client, message mqtt.Message) {
-			fmt.Print("Subscribed to topic: sensors/+/+")
-			resultado := message.Payload()
-			if messageChannel != nil {
-				t.Error("Test")
+		subscriber.Subscribe("sensor/+", client, func(client mqtt.Client, msg mqtt.Message) {
+			resultado := string(msg.Payload())
+			topic := msg.Topic()
+			fmt.Printf("Recebido: %s do tópico: %s\n", resultado, topic)
+
+			if ReturnRegex(topic).MatchString(resultado) {
+				fmt.Print("\nPayload above fits all the publish fields\n")
+			} else {
+				t.Error("\nPayload above does not fit all the publish fields\n")
 			}
-			fmt.Printf("%s", resultado)
 		})
-
-		for sensorType := 0; sensorType < len(topics); sensorType++ {
-
-			var topic string
-			var payload string
-
-			var id = rand.IntN(100)
-
-			switch sensorType {
-
-			case gasesSensorType:
-				topic = Topic(sensorType, id)
-				payload = Payload(sensorType, id)
-			case radiationSensorType:
-				topic = Topic(sensorType, id)
-				payload = Payload(sensorType, id)
-			}
-
-			token := client.Publish(topic, 1, false, payload)
-			token.Wait()
-
-			fmt.Printf("Published message in %s: %s\n", topic, payload)
-		}
+		publisher.Publish(Payload(1, 1), "sensor/radiation", client)
+		publisher.Publish(Payload(0, 1), "sensor/gases", client)
 	})
 }
