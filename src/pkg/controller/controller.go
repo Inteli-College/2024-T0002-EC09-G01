@@ -33,6 +33,8 @@ func Payload(sensorType int, id int) string {
 	return "No messaeg received"
 }
 
+
+
 func Controller(id int) {
 	client := DefaultClient.CreateClient(DefaultClient.Broker, fmt.Sprintf("publisher-%s", strconv.Itoa(id)), DefaultClient.Handler)
 
