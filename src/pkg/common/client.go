@@ -11,8 +11,8 @@ import (
 const Broker = "tcp://82cbaaf185b446e6a2cca175950e15ed.s1.eu.hivemq.cloud:1883/mqtt"
 const IdPublisher = "go-mqtt-publisher"
 const IdSubscriber = "go-mqtt-subscriber"
-const Username = ""
-const Password = ""
+const Username = "grupo1"
+const Password = "Admin12345"
 
 var Handler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 	fmt.Printf("Received: %s on topic %s\n", msg.Payload(), msg.Topic())

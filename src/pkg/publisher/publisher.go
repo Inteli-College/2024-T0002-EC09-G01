@@ -3,7 +3,6 @@ package publisher
 import (
 	"fmt"
 	MQTT "github.com/eclipse/paho.mqtt.golang"
-	"time"
 )
 
 func Publish(content string, topic string, client MQTT.Client) {
