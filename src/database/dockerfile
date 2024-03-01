@@ -1,0 +1,13 @@
+FROM ubuntu:latest
+
+# Install Docker
+RUN apt-get update && apt-get install -y docker.io
+
+# Copy the startup script
+COPY start_container.sh /usr/local/bin/
+
+# Set execute permissions
+RUN chmod +x /usr/local/bin/start_container.sh
+
+# Define the command to run when the container starts
+CMD ["start_container.sh"]
