@@ -2,19 +2,27 @@ package pub_mics6814
 
 import (
 	MICS6814 "2024-T0002-EC09-G01/src/internal/mics6814"
-	DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
 	"encoding/json"
 	"fmt"
-	"time"
 	"strconv"
+	"time"
 )
 
-type SendGasesData struct {
-	CurrentTime   time.Time              `json:"current_time"`
-	GasesData     MICS6814.SensorConfig  `json:"gases-values"`
+type PublishPacketGases struct {
+	PacketId   int           `json:"packet-id"`
+	TopicName  string        `json:"topic-name"`
+	Qos        int           `json:"qos"`
+	RetainFlag bool          `json:"retain-flag"`
+	Payload    SendGasesData `json:"payload"`
+	DupFlag    bool          `json:"duplicated-flag"`
 }
 
-func (s *SendGasesData) ToJSON() (string, error) {
+type SendGasesData struct {
+	CurrentTime time.Time             `json:"current_time"`
+	GasesData   MICS6814.SensorConfig `json:"gases-values"`
+}
+
+func (s *PublishPacketGases) ToJSON() (string, error) {
 	jsonData, err := json.Marshal(s)
 	if err != nil {
 		return "", err
@@ -22,34 +30,22 @@ func (s *SendGasesData) ToJSON() (string, error) {
 	return string(jsonData), nil
 }
 
-
-func ControllerGases(id int) {
-
-	client := DefaultClient.CreateClient(DefaultClient.Broker, fmt.Sprintf("publisher-mics6814-%s", strconv.Itoa(id)), DefaultClient.Handler)
-
-	if token := client.Connect(); token.Wait() && token.Error() != nil {
-		panic(token.Error())
-	}
-
+func CreatePayloadGases(id int) string {
 	senddata := SendGasesData{
 		CurrentTime:   time.Now(),
-		GasesData:     MICS6814.CreateGasesValues(),
+		GasesData: MICS6814.CreateGasesValues(),
 	}
 
-	payload, _ := senddata.ToJSON()
-
-	for {
-
-		if client.IsAuthorized("sensors", 1) {
-			token := client.Publish(fmt.Sprintf("sensors/gases/%s", strconv.Itoa(id)), 1, false, payload)
-			token.Wait()
-			token.Wait()
-
-			fmt.Printf("Published message in %s: %s\n", fmt.Sprintf("sensors/gases/%s", strconv.Itoa(id)), payload)
-		} else {
-			fmt.Println("Client not authorized.")
-		}
-
-		time.Sleep(2 * time.Second)
+	publishpacket := PublishPacketGases{
+		PacketId:   id,
+		TopicName:  fmt.Sprintf("sensor/gases/%s", strconv.Itoa(id)),
+		Qos:        1,
+		RetainFlag: false,
+		Payload:    senddata,
+		DupFlag:    false,
 	}
+
+	payload, _ := publishpacket.ToJSON()
+	return payload
 }
+

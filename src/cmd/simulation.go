@@ -1,8 +1,9 @@
 package main
 
 import (
-	MICS6814 "2024-T0002-EC09-G01/src/pkg/pub_mics6814"
-	RXWLIB900 "2024-T0002-EC09-G01/src/pkg/pub_rxwlib900"
+	// MICS6814 "2024-T0002-EC09-G01/src/pkg/pub_mics6814"
+	// RXWLIB900 "2024-T0002-EC09-G01/src/pkg/pub_rxwlib900"
+	Controller "2024-T0002-EC09-G01/src/pkg/controller"
 	"sync"
 )
 
@@ -14,11 +15,7 @@ func main() {
 		wg.Add(1)
 		go func(id int) {
 			defer wg.Done()
-			MICS6814.ControllerGases(id)
-		}(i)
-		go func(id int) {
-			defer wg.Done()
-			RXWLIB900.ControllerRadiation(id)
+			Controller.Controller(id)
 		}(i)
 	}
 
