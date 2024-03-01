@@ -78,8 +78,8 @@ func TestClient(t *testing.T) {
 			t.Error(token.Error())
 		}
 
-		token := client.Subscribe(subscribeTopic, 1, nil)
-		token.Wait()
+		token2 := client.Subscribe(subscribeTopic, 1, nil)
+		token2.Wait()
 		if token.Error() != nil {
 			t.Error(token.Error())
 		}
