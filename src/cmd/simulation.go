@@ -16,7 +16,7 @@ func main() {
 		go func(id int) {
 			defer wg.Done()
 			Controller.Controller(id)
-		}(i)	
+		}(i)
 	}
 
 	wg.Wait()
