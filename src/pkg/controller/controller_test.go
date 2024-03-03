@@ -29,7 +29,7 @@ func ReturnRegex(topic string) *regexp.Regexp {
 func TestController(t *testing.T) {
 
 
-	client := DefaultClient.CreateClient(DefaultClient.Broker, DefaultClient.IdPublisher, DefaultClient.Handler)
+	client := DefaultClient.CreateClient(DefaultClient.IdPublisher, DefaultClient.Handler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())

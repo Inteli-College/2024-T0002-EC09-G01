@@ -36,7 +36,7 @@ func Payload(sensorType int, id int) string {
 
 
 func Controller(id int) {
-	client := DefaultClient.CreateClient(DefaultClient.Broker, fmt.Sprintf("publisher-%s", strconv.Itoa(id)), DefaultClient.Handler)
+	client := DefaultClient.CreateClient(fmt.Sprintf("publisher-%s", strconv.Itoa(id)), DefaultClient.Handler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
