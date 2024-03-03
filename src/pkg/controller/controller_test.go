@@ -5,8 +5,8 @@ import (
 	publisher "2024-T0002-EC09-G01/src/pkg/publisher"
 	subscriber "2024-T0002-EC09-G01/src/pkg/subscriber"
 	"fmt"
+	"time"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	// "sync"
 	"regexp"
 	"testing"
 )
@@ -27,6 +27,7 @@ func ReturnRegex(topic string) *regexp.Regexp {
 }
 
 func TestController(t *testing.T) {
+
 
 	client := DefaultClient.CreateClient(DefaultClient.Broker, DefaultClient.IdPublisher, DefaultClient.Handler)
 
@@ -49,5 +50,30 @@ func TestController(t *testing.T) {
 		})
 		publisher.Publish(Payload(1, 1), "sensor/radiation", client)
 		publisher.Publish(Payload(0, 1), "sensor/gases", client)
+		client.Disconnect(250)
 	})
+
+	t.Run("TestPublishFields", func(t *testing.T) {
+		var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+
+			if msg.Qos() != 1 {
+				t.Error("QoS is not 1")
+			}		
+			fmt.Printf("QoS recebido: %d\n", msg.Qos())
+		}
+	
+		if token := client.Connect(); token.Wait() && token.Error() != nil {
+			panic(token.Error())
+		}
+
+		if token := client.Subscribe("sensor/#", 1, messagePubHandler); token.Wait() && token.Error() != nil {
+			fmt.Println(token.Error())
+			return
+		}
+	
+		time.Sleep(2 * time.Second)
+		client.Disconnect(250)
+		
+	})
+
 }
