@@ -2,265 +2,31 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	"encoding/json"
 	"fmt"
 	"log"
+	"time"
+
+	DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+	_ "github.com/mattn/go-sqlite3"
 )
 
-func ConnectToDatabase(source string, database string) *sql.DB {
-	db, err := sql.Open(source, database)
-	if err != nil {
-		log.Fatal(err)
-	}
+func ConnectToDatabase(database string, source string) *sql.DB {
+	db, err := sql.Open(database, source)
 
-	return db
+	catchErrors(err)
+
+	return CreateTable(db)
 }
 
-func InsertIntoSensors(data Sensor) string {
-	db := ConnectToDatabase("sqlite3", "database.db")
-
-	query := `
-			INSERT INTO sensors
-				(latitude, longitude, sensor_name, sensor_code, manufacturer, registered_by, registration_date) 
-				VALUES (?, ?, ?, ?, ?, ?, ?);
-		`
-	statement, err := db.Prepare(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	_, err = statement.Exec(
-		data.Latitude,
-		data.Longitude,
-		data.Sensor,
-		data.Code,
-		data.Manufacturer,
-		data.Author,
-		data.Date,
-	)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	response := fmt.Sprintf("Sensor: %s added successfully", data.Sensor)
-
-	return response
-}
-
-type SQLSensor struct {
-	Id int `json:"id"`
-	Latitude float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
-	Sensor string `json:"sensor"`
-	Code int `json:"code"`
-	Manufacturer string `json:"manufacturer"`
-	Author string `json:"author"`
-	Date string `json:"date"`
-}
-
-func GetInSensors() []SQLSensor {
-	db := ConnectToDatabase("sqlite3", "database.db")
-
-	query := `
-		SELECT * FROM sensors;
-	`
-	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var sensors []SQLSensor
-	for rows.Next() {
-		var sensor SQLSensor
-		err := rows.Scan(
-			&sensor.Id,
-			&sensor.Latitude,
-			&sensor.Longitude,
-			&sensor.Sensor,
-			&sensor.Code,
-			&sensor.Manufacturer,
-			&sensor.Author,
-			&sensor.Date,
-		)
-		if err != nil {
-			log.Fatal(err)
-		}
-		sensors = append(sensors, sensor)
-	}
-
-	return sensors
-}
-
-func insertIntoGases(data Gas) string {
-	db := ConnectToDatabase("sqlite3", "database.db")
-
-	query := `
-		INSERT INTO gases
-		(sensorId, sensorName, unit, time, NH3, CO, C2H5OH, H2, iC4H10, CH4, NO2, C3H8)
-		VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
-	`
-	statement, err := db.Prepare(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	_, err = statement.Exec(
-		data.SensorId,
-		data.SensorName,
-		data.Unit,
-		data.Time,
-		data.NH3,
-		data.CO,
-		data.C2H5OH,
-		data.H2,
-		data.IC4H10,
-		data.CH4,
-		data.NO2,
-		data.C3H8,
-	)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	response := fmt.Sprintf("Gas: %s added successfully", data.SensorName)
-
-	return response
-}
-
-type SQLGas struct {
-	Id int `json:"id"`
-	SensorId int `json:"sensorId"`
-	SensorName string `json:"sensorName"`
-	Unit string `json:"unit"`
-	Time string `json:"time"`
-	NH3 float64 `json:"NH3"`
-	CO float64 `json:"CO"`
-	C2H5OH float64 `json:"C2H5OH"`
-	H2 float64 `json:"H2"`
-	IC4H10 float64 `json:"IC4H10"`
-	CH4 float64 `json:"CH4"`
-	NO2 float64 `json:"NO2"`
-	C3H8 float64 `json:"C3H8"`
-}
-
-func GetInGases() []SQLGas {
-	db := ConnectToDatabase("sqlite3", "database.db")
-
-	query := `
-		SELECT * FROM gases;
-	`
-	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var gases []SQLGas
-	for rows.Next() {
-		var gas SQLGas
-		err := rows.Scan(
-			&gas.Id,
-			&gas.SensorId,
-			&gas.SensorName,
-			&gas.Unit,
-			&gas.Time,
-			&gas.NH3,
-			&gas.CO,
-			&gas.C2H5OH,
-			&gas.H2,
-			&gas.IC4H10,
-			&gas.CH4,
-			&gas.NO2,
-			&gas.C3H8,
-		)
-		if err != nil {
-			log.Fatal(err)
-		}
-		gases = append(gases, gas)
-	}
-
-	return gases
-}
-
-func insertIntoRadiation(data Radiation) string {
-	db := ConnectToDatabase("sqlite3", "database.db")
-
-	query := `
-		INSERT INTO radiation
-		(sensorId, sensorName, unit, time, radiation)
-		VALUES (?,?,?,?,?)
-	`
-	statement, err := db.Prepare(query)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	_, err = statement.Exec(
-		data.SensorId,
-		data.SensorName,
-		data.Unit,
-		data.Time,
-		data.Radiation,
-	)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	response := fmt.Sprintf("Radiation: %s added successfully", data.SensorName)
-
-	return response
-}
-
-type SQLRadiation struct {
-	Id int `json:"id"`
-	SensorId int `json:"sensorId"`
-	SensorName string `json:"sensorName"`
-	Unit string `json:"unit"`
-	Time string `json:"time"`
-	Radiation float64 `json:"radiation"`
-}
-
-func GetInRadiation() []SQLRadiation {
-	db := ConnectToDatabase("sqlite3", "database.db")
-
-	query := `
-		SELECT * FROM radiation;
-	`
-	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var radiation []SQLRadiation
-	for rows.Next() {
-		var rad SQLRadiation
-		err := rows.Scan(
-			&rad.Id,
-			&rad.SensorId,
-			&rad.SensorName,
-			&rad.Unit,
-			&rad.Time,
-			&rad.Radiation,
-		)
-		if err != nil {
-			log.Fatal(err)
-		}
-		radiation = append(radiation, rad)
-	}
-
-	return radiation
-}
-
-func CreateTable() {
-	db := ConnectToDatabase("sqlite3", "database.db")
+func CreateTable(db *sql.DB) *sql.DB {
 
 	sqlQuery := `
 		CREATE TABLE IF NOT EXISTS gases
 		(
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			id INTEGER PRIMARY KEY,
 			sensorId INTEGER,
 			sensorName TEXT,
 			unit VARCHAR(7),
@@ -279,7 +45,7 @@ func CreateTable() {
 	anotherQuery := `
 		CREATE TABLE IF NOT EXISTS radiation
 		(
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			id INTEGER PRIMARY KEY,
 			sensorId INTEGER,
 			sensorName TEXT,
 			unit VARCHAR(7),
@@ -299,25 +65,252 @@ func CreateTable() {
 			manufacturer VARCHAR(100),
 			registered_by VARCHAR(100),
 			registration_date DATETIME
-		);
+		)
 	`
 
 	command, err := db.Prepare(sqlQuery)
-	if err != nil {
-		log.Fatal(err)
-	}
+
+	catchErrors(err)
 
 	command2, err := db.Prepare(anotherQuery)
-	if err != nil {
-		log.Fatal(err)
-	}
+
+	catchErrors(err)
 
 	command3, err := db.Prepare(oneMoreQuery)
-	if err != nil {
-		log.Fatal(err)
-	}
+
+	catchErrors(err)
 
 	command.Exec()
 	command2.Exec()
 	command3.Exec()
+
+	return db
+}
+
+func InsertIntoSensors(
+	db *sql.DB,
+	data map[string]interface{},
+) {
+
+	query := `
+			INSERT INTO sensors
+				(latitude, longitude, sensor_name, sensor_code, manufacturer, registered_by, registration_date) 
+				VALUES (?, ?, ?, ?, ?, ?, ?);
+		`
+
+	statement, err := db.Prepare(query)
+
+	catchErrors(err)
+
+	_, err = statement.Exec(
+		data["latitude"],
+		data["longitude"],
+		data["sensor"],
+		data["code"],
+		data["manufacturer"],
+		data["author"],
+		data["date"],
+	)
+
+	catchErrors(err)
+
+	return
+}
+
+func insertIntoGases(
+	db *sql.DB,
+	data map[string]interface{},
+) {
+	query := `
+		INSERT INTO gases
+		(sensorId, sensorName, unit, time, NH3, CO, C2H5OH, H2, iC4H10, CH4, NO2, C3H8)
+		VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+	`
+	statement, err := db.Prepare(query)
+
+	catchErrors(err)
+
+	_, err = statement.Exec(
+		data["id"],
+		data["sensor"],
+		data["unit"],
+		data["current_time"],
+		data["ammonia"],
+		data["carbon_monoxide"],
+		data["ethanol"],
+		data["hydrogen"],
+		data["iso_butane"],
+		data["methane"],
+		data["nitrogen_dioxide"],
+		data["propane"],
+	)
+
+	catchErrors(err)
+
+	return
+
+}
+
+func insertIntoRadiation(
+	db *sql.DB,
+	data map[string]interface{},
+) {
+	query := `
+		INSERT INTO radiation
+		(sensorId, sensorName, unit, time, radiation)
+		VALUES (?,?,?,?,?)
+	`
+	statement, err := db.Prepare(query)
+
+	catchErrors(err)
+
+	_, err = statement.Exec(
+		data["id"],
+		data["sensor"],
+		data["unit"],
+		data["current_time"],
+		data["radiation"],
+	)
+
+	catchErrors(err)
+
+	return
+
+}
+
+func catchErrors(err error) {
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+}
+
+var DatabaseHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+	// fmt.Printf("Received: %s on topic %s\n", msg.Payload(), msg.Topic())
+
+	var data map[string]interface{}
+
+	err := json.Unmarshal([]byte(string(msg.Payload())), &data)
+
+	catchErrors(err)
+
+	// fmt.Println(data["payload"])
+
+	payloadData := data["payload"].(map[string]interface{})
+
+	db, err := sql.Open("sqlite3", "./database.db")
+
+	catchErrors(err)
+
+	if payloadData["gases-values"] != nil {
+		
+		gasesValues := payloadData["gases-values"].(map[string]interface{})
+
+		result := make(map[string]interface{})
+
+		result["id"] = data["packet-id"]
+
+		result["time"] = payloadData["current_time"]
+
+		for key, value := range gasesValues["gases-values"].(map[string]interface{}) {
+			result[key] = value
+		}
+
+		result["sensor"] = gasesValues["sensor"]
+		result["unit"] = gasesValues["unit"]
+
+		insertIntoGases(db, result)
+
+	} else {
+		
+		radiationValues := payloadData["radiation-values"].(map[string]interface{})
+
+		result := make(map[string]interface{})
+
+		result["id"] = data["packet-id"]
+
+		result["time"] = payloadData["current_time"]
+
+		for key, value := range radiationValues["radiation-values"].(map[string]interface{}) {
+			result[key] = value
+		}
+
+		result["sensor"] = radiationValues["sensor"]
+		result["unit"] = radiationValues["unit"]
+
+		fmt.Println(result)
+
+		insertIntoRadiation(db, result)
+	}
+
+	return
+
+}
+
+func main() {
+
+	sensorInteli := map[string]interface{}{
+		"latitude": -23.555734690062174,
+		"longitude": -46.73388952459531,
+		"sensor": "Sensor-Inteli",
+		"code": 123,
+		"manufacturer": "SmarTopia",
+		"author": "Luana Parra",
+		"date": time.Now(),
+	}
+	
+	sensorPaulista := map[string]interface{}{
+		"latitude": -23.561472985154808,
+		"longitude": -46.65594627611366,
+		"sensor": "Sensor-Paulista",
+		"code": 124,
+		"manufacturer": "SmarTopia",
+		"author": "Emanuele Martins",
+		"date": time.Now(),
+	}
+	
+	sensorFariaLima := map[string]interface{}{
+		"latitude": -23.587039143730863,
+		"longitude": -46.68163586869637,
+		"sensor": "Sensor-Faria-Lima",
+		"code": 125,
+		"manufacturer": "SmarTopia",
+		"author": "Felipe Leão",
+		"date": time.Now(),
+	}
+	
+	sensorShare := map[string]interface{}{
+		"latitude": -23.572985847044286,
+		"longitude": -46.706362987750225,
+		"sensor": "Sensor-Share",
+		"code": 126,
+		"manufacturer": "SmarTopia",
+		"author": "Felipe Campos",
+		"date" : time.Now(),
+	}
+
+	db, err := sql.Open("sqlite3", "./database.db")	
+
+	catchErrors(err)
+
+	
+	ConnectToDatabase("sqlite3", "./database.db")
+	
+	InsertIntoSensors(db, sensorInteli)
+	InsertIntoSensors(db, sensorPaulista)
+	InsertIntoSensors(db, sensorFariaLima)
+	InsertIntoSensors(db, sensorShare)
+
+	client := DefaultClient.CreateClient(DefaultClient.Broker, DefaultClient.IdSubscriber, DatabaseHandler)
+
+	if token := client.Connect(); token.Wait() && token.Error() != nil {
+		panic(token.Error())
+	}
+
+	if token := client.Subscribe("sensor/#", 1, nil); token.Wait() && token.Error() != nil {
+		fmt.Println(token.Error())
+		return
+	}
+
+	fmt.Println("Subscriber running...")
+	select {}
 }
