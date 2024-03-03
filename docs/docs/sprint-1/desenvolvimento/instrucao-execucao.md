@@ -33,25 +33,47 @@ As seguintes ferramentas são necessárias para rodar o projeto sem problemas
 
 Para utilizar os módulos:
 
-1. Clone o repositório, se ainda não o tiver feito:
+**1. Clone o repositório, se ainda não o tiver feito:**
 
 ```bash
-    git clone https://github.com/Inteli-College/2024-T0002-EC09-G01.git
+git clone https://github.com/Inteli-College/2024-T0002-EC09-G01.git
 ```
 
-2. Entre no diretório _src/mqtt_
+**2. Entre no diretório _src_:**
 
 ```bash
-    cd src/mqtt
+cd src
 ```
 
-3. Entre no diretório do pacote que deseja rodar:
+**3. Preparando o broker:**
 
-Exemplo com o pacote _Subscriber_:
-   
+Para rodar a solução on-premise, dá-se a possibilidade de configurar um broker local com o mosquitto. Para isso, deve-se instalar:
+
 ```bash
-cd subscriber
-go run .
+sudo apt-get install mosquitto mosquitto-clients
+```
+
+Após isso, entrar na pasta de configuração e rodar o broker:
+
+```bash
+cd config
+mosquitto -c mosquito.conf
+```
+
+Para rodar a solução com um cluster próprio, deve-se alterar o arquivo de variáveis de ambiente para conter as informações do broker desejado e autenticação.
+
+**4. Rodando o simulador de sensores:**
+
+```bash
+cd src/cmd
+go run simulation.go
+```
+
+**5. Rodando o Subscriber para adicionar as informações ao banco de dados:**
+
+```bash
+cd src/database
+go run database.go
 ```
 
 ## Testes
@@ -73,7 +95,7 @@ Para garantir a funcionalidade da solução, foram criados testes automatizados 
 Exemplo com o pacote _Publisher_:
 
 ```bash
-cd src/mqtt
+cd src/tests
 go test
 ```
 
