@@ -5,7 +5,7 @@ label: "Criação de dados simulados"
 # Criação de dados simulados
 
 
-Para a execução do projeto demanda-se a criação de um simulador para dispositivos IoT. Esse simulador é capaz de enviar informações para tópicos em um formato de dados consistente, semelhante aos dados captados por sensores reais. Até o momento, os sensores simulados no estado atual do projeto incluem o [Mics-6814](https://datasheetspdf.com/product/1350171/SGX/MiCS-6814/index.html) e o [RXW-LIB-900](https://sigmasensors.com.br/produtos/.
+Para a execução do projeto demanda-se a criação de um simulador para dispositivos IoT. Esse simulador é capaz de enviar informações para tópicos em um formato de dados consistente, semelhante aos dados captados por sensores reais. Até o momento, os sensores simulados no estado atual do projeto incluem o [Mics-6814](https://datasheetspdf.com/product/1350171/SGX/MiCS-6814/index.html) e o [RXW-LIB-900](https://sigmasensors.com.br/produtos/).
 
 Para viabilizar essa simulação, foi desenvolvida uma função especializada em gerar dados aleatórios, alinhados com as faixas de alcance dos sensores reais. A implementação dessa função pode ser encontrada no diretório `2024-T0002-EC02-G01/src/internal/common`.
 
