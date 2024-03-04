@@ -300,7 +300,7 @@ func main() {
 	InsertIntoSensors(db, sensorFariaLima)
 	InsertIntoSensors(db, sensorShare)
 
-	client := DefaultClient.CreateClient(DefaultClient.Broker, DefaultClient.IdSubscriber, DatabaseHandler)
+	client := DefaultClient.CreateClient(DefaultClient.IdSubscriber, DatabaseHandler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
