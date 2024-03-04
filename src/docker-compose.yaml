@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+
+  metabase:
+    image: metabase/metabase
+    ports:
+      - "3000:3000"
+    container_name: metabase
+    volumes:
+      - ./database-api:/project
+
+  # simulation:
+  #   image: golang:latest
+  #   container_name: simulation
+  #   volumes:
+  #     - ./:/app
+  #   command: /bin/bash -c "cd /app && go mod tidy && go mod download && go build -o simulation ./cmd/simulation.go && ./simulation"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.5'
+  #         memory: 512M
+
+  # subscribe:
+  #   image: golang:latest
+  #   container_name: subscribe
+  #   volumes:
+  #     - ./:/app
+  #   command: /bin/bash -c "cd /app && go mod tidy && go mod download && go build -o simulation ./database-api/database.go && ./database"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.5'
+  #         memory: 512M
