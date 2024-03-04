@@ -18,7 +18,7 @@ var Handler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 
 func CreateClient(id string, callback_handler mqtt.MessageHandler) mqtt.Client {
 
-	err := godotenv.Load("../.env")
+	err := godotenv.Load(".env")
 	if err != nil {
 		fmt.Printf("Error loading .env file: %s", err)
 	}
