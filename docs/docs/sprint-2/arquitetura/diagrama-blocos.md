@@ -1,5 +1,5 @@
 ---
-label: "Diagrama de blocos - v1"
+label: "Diagrama de blocos - v2"
 ---
 
 # Diagrama de blocos
@@ -7,7 +7,7 @@ label: "Diagrama de blocos - v1"
 
 O diagrama de blocos é uma representação visual de como planeja-se que seja o fluxo de comunicação entre as partes do projeto. Abaixo é mostrado a arquitetura esperada do sistema:
 
-<img src={require('/img/diagrama-de-blocos.png').default} width='100%'/>
+<img src={require('/img/diagrama-de-blocos-v2.png').default} width='100%'/>
 <sub>Diagrama de blocos da solução - Autoria própria.</sub>
 
 ## Descrição do diagrama solução
@@ -19,17 +19,16 @@ Para a exucução do projeto serão usados dados simulados de três sensores dif
 O broker é parte essencial para a transmissão de dados via MQTT, protocolo amplamente utilizado para envio de informações coletadas por sensores. Essa parte da solução serve como uma ponte que coordena diversos dados publicas em tópicos. Quando uma mensagem é publicada o broker é quem fará a distribuição dos dados aos inscritos no canal.
 
 ### Bridge
-A bridge é a parte responsável por fazer a transmissão de dados recebidos pelos sensores para o lado web da solução. Ela é composta por duas partes, sendo a primeira delas um bloco inscrito nos tópicos que os sensores publicam as informações e a segunda um serviço de mensageria que facilita a comunicação assíncrona entre as partes do sistema.
+A bridge é a parte responsável por fazer a transmissão de dados recebidos pelos sensores para o lado web da solução. Ela é composta por duas partes, sendo a primeira delas um bloco inscrito nos tópicos que os sensores publicam as informações e a segunda um serviço de mensageria que facilita a comunicação assíncrona entre as partes do sistema. 
 
 ### Banco de dados
-O banco de dados será onde as infomações de toda a aplicação serão armazenadas, desde dados capturados pelos sensores à possíveis dados de login de usuários.
+O banco de dados será onde as infomações de toda a aplicação serão armazenadas, desde dados capturados pelos sensores à possíveis dados de login de usuários. No ponto atual da solução (sprint 2) foi utilizado um banco de dados estruturado SQLite mas pretende-se implementar um banco de dados não estruturado em sprints futuras.
 
 ### Backend
-O banckend da solução é a parte que tem responsabilidade de se comunicar diretamente com o banco de dados e servir informações solicitadas pelos usuários.
+O banckend da solução tem responsabilidade fazer o tratamento dos dados recebidos e se registra-los diretamente com o banco de dados.
 
 ### Frontend
-O frontend é onde todas infomações são mostardas ao usuário através de uma dashboard.
-
+O frontend será contruido utilizando uma ferramenta de Bussiness Inteligence (BI), o Metabase, para facilitar o acesso a informações do bando de dados e construção de gráficos.
 
 
 
