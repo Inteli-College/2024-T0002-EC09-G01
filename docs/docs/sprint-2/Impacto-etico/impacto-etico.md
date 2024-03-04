@@ -7,15 +7,25 @@
 
 ### 1.1. Coleta, Armazenamento e Uso de Dados
 
-Os dados a serem coletados dizem respeito à qualidade do ar, incluindo concentrações de gases como CO2, NO2, MP10, MP2.5, além de dados sobre a intensidade de radiação solar e evapotranspiração. 
+**Coleta de dados**
 
-Todos esses dados serão armazenados no sistema de banco de dados do projeto e disponibilizados publicamente em uma interface de fácil acesso para a comunidade. Segmentações específicas serão aplicadas para otimizar o uso dessas informações, seja para consulta pública ou para pesquisa e estudos. 
+Os dados a serem coletados abrangem diversos parâmetros relacionados à qualidade do ar, como concentrações de CO2, NO2, MP10 e MP2.5, bem como informações sobre a intensidade da radiação solar e a evapotranspiração. Esses dados serão obtidos por meio de sensores instalados em pontos estratégicos, garantindo uma cobertura adequada do território em estudo.
 
-Embora as informações estejam publicamente disponíveis, é essencial garantir conformidade com regulamentações de proteção de dados, seguindo os procedimentos da LGPD.
+**Armazenamento de dados**
+
+Todas as informações coletadas serão devidamente registradas e armazenadas em um sistema de banco de dados especialmente desenvolvido para o projeto. Este sistema garantirá a integridade e a segurança dos dados, adotando medidas robustas para prevenir qualquer forma de acesso não autorizado.
+
+**Uso de dados**
+
+Os dados serão disponibilizados publicamente por meio de uma interface acessível, permitindo que a comunidade tenha fácil acesso a essas informações. Além disso, serão implementadas segmentações específicas para otimizar a utilização dos dados, seja para consulta pública, pesquisa acadêmica ou estudos científicos.
+
+É importante ressaltar que, embora as informações sejam de acesso público, é fundamental garantir a conformidade com as regulamentações de proteção de dados, em conformidade com os procedimentos estabelecidos pela Lei Geral de Proteção de Dados (LGPD).
 
 ### 1.2. Dados Não Pessoais
 
-Os dados coletados serão categorizados como não pessoais, pois são obtidos de espaços públicos com finalidades informativas, não estabelecendo relação direta com indivíduos ou instituições.
+Os dados obtidos serão categorizados como não pessoais devido à sua natureza informativa e à ausência de vínculo direto com indivíduos ou instituições específicas. Eles são coletados de espaços públicos, com o propósito de fornecer informações relevantes sobre a qualidade do ar e outros parâmetros ambientais, sem identificar ou rastrear indivíduos.
+
+Essa classificação como dados não pessoais é crucial para assegurar a conformidade com as regulamentações de proteção de dados e garantir a transparência e a acessibilidade das informações para toda a comunidade interessada no projeto.
 
 ## 2. Equidade e Justiça
 
