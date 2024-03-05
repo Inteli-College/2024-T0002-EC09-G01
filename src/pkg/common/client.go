@@ -10,6 +10,7 @@ import (
 
 const IdPublisher = "go-mqtt-publisher"
 const IdSubscriber = "go-mqtt-subscriber"
+
 const port = 8883
 
 var Handler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {

@@ -2,14 +2,14 @@ package testing
 
 import (
 	DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
-	publisher "2024-T0002-EC09-G01/src/pkg/publisher"
-	subscriber "2024-T0002-EC09-G01/src/pkg/subscriber"
 	controller "2024-T0002-EC09-G01/src/pkg/controller"
+	// publisher "2024-T0002-EC09-G01/src/pkg/publisher"
+	// subscriber "2024-T0002-EC09-G01/src/pkg/subscriber"
 	"fmt"
-	"time"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"regexp"
 	"testing"
+	"time"
 )
 
 func ReturnRegex(topic string) *regexp.Regexp {
@@ -28,8 +28,6 @@ func ReturnRegex(topic string) *regexp.Regexp {
 }
 
 func TestController(t *testing.T) {
-
-
 	client := DefaultClient.CreateClient(DefaultClient.IdPublisher, DefaultClient.Handler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
@@ -37,6 +35,7 @@ func TestController(t *testing.T) {
 	}
 
 	t.Run("TestPublishFields", func(t *testing.T) {
+
 		var messageHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 
 			resultado := string(msg.Payload())
@@ -49,10 +48,12 @@ func TestController(t *testing.T) {
 				t.Error("\nPayload does not fit all the publish fields\n")
 			}
 		}
+		
+		token := client.Subscribe("sensor/#", 1, messageHandler)
+		token.Wait()
 
-		subscriber.Subscribe("sensor/+", client, messageHandler)
-		publisher.Publish(controller.Payload(1, 1), "sensor/radiation", client)
-		publisher.Publish(controller.Payload(0, 1), "sensor/gases", client)
+		client.Publish("sensor/radiation", 1, false, controller.Payload(1, 1))
+		client.Publish("sensor/radiation", 1, false, controller.Payload(0, 1))
 		client.Disconnect(250)
 	})
 
@@ -61,10 +62,10 @@ func TestController(t *testing.T) {
 
 			if msg.Qos() != 1 {
 				t.Error("QoS is not 1")
-			}		
+			}
 			fmt.Printf("QoS recebido: %d\n", msg.Qos())
 		}
-	
+
 		if token := client.Connect(); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}
@@ -73,10 +74,10 @@ func TestController(t *testing.T) {
 			fmt.Println(token.Error())
 			return
 		}
-	
+
 		time.Sleep(2 * time.Second)
 		client.Disconnect(250)
-		
+
 	})
 
 }
