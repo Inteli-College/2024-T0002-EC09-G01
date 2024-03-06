@@ -35,12 +35,13 @@ jobs:
           tree
 
       - name: Test client
-        run: | 
-          cd tests
+        working-directory: src/tests/
+        run: 
           go test -v --cover client_test.go
       
       - name: Test controller
-        run: | 
+        working-directory: src/tests/
+        run:  
           go test -v --cover controller_test.go
       
       # - name: Test API do banco de dados
@@ -48,13 +49,13 @@ jobs:
       #     go test -v --cover api_db_test.go
 
       - name: Teste unitário sensor de gases
-        run: | 
-          cd ../internal/mics6814/
+        working-directory: src/internal/mics6814/
+        run:  
           go test -v --cover mics6814_test.go
 
       - name: Teste unitário sensor de radiação
-        run: | 
-          cd ../rxwlib900/
+        working-directory: src/internal/rxwlib900/
+        run:  
           go test -v --cover rxwlib900_test.go
       
 
