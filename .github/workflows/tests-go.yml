@@ -1,13 +1,6 @@
 name: Test Go TDD
 
-on:
-  push:
-    branches:
-      - "develop"
-      - "main"
-      - "github-actions"
-    paths:
-      - "./src/"
+on: [push]
 
 jobs:
   test:
