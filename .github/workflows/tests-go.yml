@@ -3,40 +3,56 @@ name: Test Go TDD
 on:
   push:
     branches:
-      - "mqtt"
+      - "develop"
       - "main"
+      - "github-actions"
     paths:
-      - "./src/mqtt/**"
+      - "./src/"
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
+    env: 
+      BROKER_ADDR_SECRET: ${{ secrets.BROKER_ADDR_SECRET }}
+      HIVE_USER_SECRET: ${{ secrets.USERNAME_SECRET }}
+      HIVE_PWSD_SECRET: ${{ secrets.PASSWORD_SECRET }}
+
     defaults:
       run:
         shell: bash
-        working-directory: "./src/mqtt/"
+        working-directory: "./src/"
 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version: "stable"
+
       - name: Get dependencies
         run: go mod tidy
+
       - name: Test client
         run: | 
-          cd common
-          go test -v --cover .
+          cd tests
+          go test -v --cover client_test.go
       
-      - name: Test client
+      - name: Test controller
         run: | 
-          cd ../publisher
-          go test -v --cover .
+          go test -v --cover controller_test.go
       
-      - name: Test subscriber
+      # - name: Test API do banco de dados
+      #   run: | 
+      #     go test -v --cover api_db_test.go
+
+      - name: Teste unitário sensor de gases
         run: | 
-          cd ../subscriber
-          go test -v --cover .
+          cd ../internal/mics6814/
+          go test -v --cover mics6814_test.go
+
+      - name: Teste unitário sensor de radiação
+        run: | 
+          cd ../rxwlib900/
+          go test -v --cover rxwlib900_test.go
       
 
