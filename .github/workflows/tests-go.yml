@@ -9,7 +9,7 @@ jobs:
     env: 
       BROKER_ADDR: ${{ secrets.BROKER_ADDR_SECRET }}
       HIVE_USER: ${{ secrets.HIVE_PSWD_SECRET }}
-      HIVE_PWSD: ${{ secrets.HIVE_USER_SECRET }}
+      HIVE_PSWD: ${{ secrets.HIVE_USER_SECRET }}
 
     defaults:
       run:
@@ -43,10 +43,6 @@ jobs:
         working-directory: src/tests/
         run:  
           go test -v --cover controller_test.go
-      
-      # - name: Test API do banco de dados
-      #   run: | 
-      #     go test -v --cover api_db_test.go
 
       - name: Teste unitário sensor de gases
         working-directory: src/internal/mics6814/
