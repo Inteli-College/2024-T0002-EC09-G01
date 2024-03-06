@@ -26,7 +26,7 @@ jobs:
         run: go mod tidy
 
       - name: Create .env
-        working-directory: src/pkg/commom/
+        working-directory: src/pkg/
         run: 
           touch .env
           echo "BROKER_ADDR_SECRET=${{ secrets.BROKER_ADDR_SECRET }}" >> .env
