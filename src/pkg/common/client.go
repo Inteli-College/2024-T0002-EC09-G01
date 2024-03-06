@@ -26,7 +26,7 @@ func CreateClient(id string, callback_handler mqtt.MessageHandler) mqtt.Client {
 	if username == "" || password == "" {
 		err := godotenv.Load("../.env")
 		if err != nil {
-			fmt.Println("Error loading .env file")
+			fmt.Printf("Error loading .env file. error: %s", err)
 		}
 		broker = os.Getenv("BROKER_ADDR")
 		username = os.Getenv("HIVE_USER")
