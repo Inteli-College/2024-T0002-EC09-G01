@@ -32,6 +32,7 @@ jobs:
           echo "BROKER_ADDRT=${{ secrets.BROKER_ADDR_SECRET }}" >> .env
           echo "HIVE_USER=${{ secrets.HIVE_PSWD_SECRET }}" >> .env
           echo "HIVE_PWSD=${{ secrets.HIVE_USER_SECRET }}" >> .env
+          tree
 
       - name: Test client
         run: | 
