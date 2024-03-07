@@ -19,14 +19,14 @@ var Handler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 
 func CreateClient(id string, callback_handler mqtt.MessageHandler) mqtt.Client {
 
-	broker := os.Getenv("BROKER_ADDR_SECRET")
-	username := os.Getenv("HIVE_USER_SECRET")
-	password := os.Getenv("HIVE_PSWD_SECRET")
+	broker := os.Getenv("BROKER_ADDR")
+	username := os.Getenv("HIVE_USER")
+	password := os.Getenv("HIVE_PSWD")
 
 	if username == "" || password == "" {
 		err := godotenv.Load("../.env")
 		if err != nil {
-			fmt.Println("Error loading .env file")
+			fmt.Printf("\nError loading .env file. error: %s\n", err)
 		}
 		broker = os.Getenv("BROKER_ADDR")
 		username = os.Getenv("HIVE_USER")

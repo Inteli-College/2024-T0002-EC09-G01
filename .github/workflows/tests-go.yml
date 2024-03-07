@@ -1,22 +1,15 @@
 name: Test Go TDD
-
-on:
-  push:
-    branches:
-      - "develop"
-      - "main"
-      - "github-actions"
-    paths:
-      - "./src/"
+# Testing 1 2 1 2
+on: [push]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     env: 
-      BROKER_ADDR_SECRET: ${{ secrets.BROKER_ADDR_SECRET }}
-      HIVE_USER_SECRET: ${{ secrets.USERNAME_SECRET }}
-      HIVE_PWSD_SECRET: ${{ secrets.PASSWORD_SECRET }}
+      BROKER_ADDR: ${{ secrets.BROKER_ADDR_SECRET }}
+      HIVE_USER: ${{ secrets.HIVE_PSWD_SECRET }}
+      HIVE_PSWD: ${{ secrets.HIVE_USER_SECRET }}
 
     defaults:
       run:
@@ -32,27 +25,33 @@ jobs:
       - name: Get dependencies
         run: go mod tidy
 
+      - name: Creating enviroment variables
+        working-directory: src/pkg/
+        run: 
+          touch .env
+          echo "BROKER_ADDRT=${{ secrets.BROKER_ADDR_SECRET }}" >> .env
+          echo "HIVE_USER=${{ secrets.HIVE_PSWD_SECRET }}" >> .env
+          echo "HIVE_PWSD=${{ secrets.HIVE_USER_SECRET }}" >> .env
+          tree
+
       - name: Test client
-        run: | 
-          cd tests
+        working-directory: src/tests/
+        run: 
           go test -v --cover client_test.go
       
       - name: Test controller
-        run: | 
+        working-directory: src/tests/
+        run:  
           go test -v --cover controller_test.go
-      
-      # - name: Test API do banco de dados
-      #   run: | 
-      #     go test -v --cover api_db_test.go
 
       - name: Teste unitário sensor de gases
-        run: | 
-          cd ../internal/mics6814/
+        working-directory: src/internal/mics6814/
+        run:  
           go test -v --cover mics6814_test.go
 
       - name: Teste unitário sensor de radiação
-        run: | 
-          cd ../rxwlib900/
+        working-directory: src/internal/rxwlib900/
+        run:  
           go test -v --cover rxwlib900_test.go
       
 
