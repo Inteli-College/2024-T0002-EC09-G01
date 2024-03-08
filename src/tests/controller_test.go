@@ -1,14 +1,15 @@
-package controller
+package testing
 
 import (
 	DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
-	publisher "2024-T0002-EC09-G01/src/pkg/publisher"
-	subscriber "2024-T0002-EC09-G01/src/pkg/subscriber"
+	controller "2024-T0002-EC09-G01/src/pkg/controller"
+	// publisher "2024-T0002-EC09-G01/src/pkg/publisher"
+	// subscriber "2024-T0002-EC09-G01/src/pkg/subscriber"
 	"fmt"
-	"time"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"regexp"
 	"testing"
+	"time"
 )
 
 func ReturnRegex(topic string) *regexp.Regexp {
@@ -27,8 +28,6 @@ func ReturnRegex(topic string) *regexp.Regexp {
 }
 
 func TestController(t *testing.T) {
-
-
 	client := DefaultClient.CreateClient(DefaultClient.IdPublisher, DefaultClient.Handler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
@@ -37,43 +36,48 @@ func TestController(t *testing.T) {
 
 	t.Run("TestPublishFields", func(t *testing.T) {
 
-		subscriber.Subscribe("sensor/+", client, func(client mqtt.Client, msg mqtt.Message) {
+		var messageHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+
 			resultado := string(msg.Payload())
 			topic := msg.Topic()
 			fmt.Printf("Recebido: %s do tópico: %s\n", resultado, topic)
 
 			if ReturnRegex(topic).MatchString(resultado) {
-				fmt.Print("\nPayload above fits all the publish fields\n")
+				fmt.Print("\nPayload fits all the publish fields\n")
 			} else {
-				t.Error("\nPayload above does not fit all the publish fields\n")
+				t.Error("\nPayload does not fit all the publish fields\n")
 			}
-		})
-		publisher.Publish(Payload(1, 1), "sensor/radiation", client)
-		publisher.Publish(Payload(0, 1), "sensor/gases", client)
+		}
+		
+		token := client.Subscribe("sensor/#", 1, messageHandler)
+		token.Wait()
+
+		client.Publish("sensor/radiation", 1, false, controller.Payload(1, 1))
+		client.Publish("sensor/radiation", 1, false, controller.Payload(0, 1))
 		client.Disconnect(250)
 	})
 
-	t.Run("TestPublishFields", func(t *testing.T) {
-		var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+	t.Run("TestQos", func(t *testing.T) {
+		var messageHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 
 			if msg.Qos() != 1 {
 				t.Error("QoS is not 1")
-			}		
+			}
 			fmt.Printf("QoS recebido: %d\n", msg.Qos())
 		}
-	
+
 		if token := client.Connect(); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}
 
-		if token := client.Subscribe("sensor/#", 1, messagePubHandler); token.Wait() && token.Error() != nil {
+		if token := client.Subscribe("sensor/#", 1, messageHandler); token.Wait() && token.Error() != nil {
 			fmt.Println(token.Error())
 			return
 		}
-	
+
 		time.Sleep(2 * time.Second)
 		client.Disconnect(250)
-		
+
 	})
 
 }

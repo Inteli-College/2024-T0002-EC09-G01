@@ -10,6 +10,7 @@ import (
 
 const IdPublisher = "go-mqtt-publisher"
 const IdSubscriber = "go-mqtt-subscriber"
+
 const port = 8883
 
 var Handler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
@@ -18,16 +19,25 @@ var Handler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 
 func CreateClient(id string, callback_handler mqtt.MessageHandler) mqtt.Client {
 
-	err := godotenv.Load("../.env")
-	if err != nil {
-		fmt.Printf("Error loading .env file: %s", err)
+	broker := os.Getenv("BROKER_ADDR")
+	username := os.Getenv("HIVE_USER")
+	password := os.Getenv("HIVE_PSWD")
+
+	if username == "" || password == "" {
+		err := godotenv.Load("../.env")
+		if err != nil {
+			fmt.Printf("\nError loading .env file. error: %s\n", err)
+		}
+		broker = os.Getenv("BROKER_ADDR")
+		username = os.Getenv("HIVE_USER")
+		password = os.Getenv("HIVE_PSWD")
 	}
 
-	opts := mqtt.NewClientOptions().AddBroker(fmt.Sprintf("tls://%s:%d", os.Getenv("BROKER_ADDR"), port))
+	opts := mqtt.NewClientOptions().AddBroker(fmt.Sprintf("tls://%s:%d", broker, port))
 	opts.SetClientID(id)
 	opts.SetDefaultPublishHandler(callback_handler)
-	opts.SetUsername(os.Getenv("HIVE_USER"))
-	opts.SetPassword(os.Getenv("HIVE_PSWD"))
+	opts.SetUsername(username)
+	opts.SetPassword(password)
 
 	return mqtt.NewClient(opts)
 }

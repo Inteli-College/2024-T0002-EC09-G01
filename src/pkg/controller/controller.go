@@ -30,7 +30,7 @@ func Payload(sensorType int, id int) string {
 	} else if sensorType == radiationSensorType {
 		return pub_rxwlib900.CreatePayloadRadiation(id)
 	}
-	return "No messaeg received"
+	return "No message received"
 }
 
 
