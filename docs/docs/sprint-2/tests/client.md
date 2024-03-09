@@ -1,3 +1,10 @@
+---
+id: Testes
+title: Testes - Cliente
+sidebar_position: 6
+---
+
+
 # Teste de Funcionamento do Client   
 
 O teste de funcionamento do client visa essencialmente validar as atividades básicas que ele irá executar, como: 
