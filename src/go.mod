@@ -3,6 +3,7 @@ module 2024-T0002-EC09-G01/src
 go 1.21.6
 
 require (
+	github.com/confluentinc/confluent-kafka-go/v2 v2.3.0
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/gin-gonic/gin v1.9.1
 	github.com/joho/godotenv v1.5.1

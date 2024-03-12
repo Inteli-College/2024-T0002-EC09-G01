@@ -1,16 +1,19 @@
 package main
 
 import (
+	mongo "2024-T0002-EC09-G01/src/database-api/mongo"
+	consumerKafka "2024-T0002-EC09-G01/src/internal/kafka"
+	"encoding/json"
 	"fmt"
 	ckafka "github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	godotenv "github.com/joho/godotenv"
 	"log"
 	"os"
-	consumerKafka "2024-T0002-EC09-G01/src/internal/kafka"
-	"encoding/json"
 )
 
 func main() {
+
+	client := mongo.ConnectToMongo()
 
 	err := godotenv.Load("../.env")
 	if err != nil {
@@ -26,11 +29,11 @@ func main() {
 		"sasl.username":      os.Getenv("CONFLUENT_API_KEY"),
 		"sasl.password":      os.Getenv("CONFLUENT_API_SECRET"),
 		"session.timeout.ms": 6000,
-		"group.id":           "manu",
+		"group.id":           "grupo1",
 		"auto.offset.reset":  "latest",
 	}
 
-	kafkaRepository := consumerKafka.NewKafkaConsumer(configMap, []string{"teste"})
+	kafkaRepository := consumerKafka.NewKafkaConsumer(configMap, []string{"topic_queue"})
 
 	go func() {
 		if err := kafkaRepository.Consume(msgChan); err != nil {
@@ -49,7 +52,8 @@ func main() {
 			log.Fatal(err)
 		}
 
+		mongo.InsertIntoMongo(client, result)
+
 	}
 
 }
-
