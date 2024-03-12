@@ -46,6 +46,12 @@ func main() {
 	for msg := range msgChan {
 		log.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
 
+		/*Make sure to send the data as a JSON so no errors occur while consuming. Example of acceptable payload:
+
+		{"CarbonMonoxide": "carbon_monoxide", "NitrogenDioxide": "nitrogen_dioxide", "Ethanol": "ethanol", "Hydrogen": "hydrogen", "Ammonia": "ammonia", "Methane": "methane", "Propane": "propane", "IsoButane": "iso_butane"}
+		
+		*/
+
 		var result map[string]interface{}
 		err := json.Unmarshal(msg.Value, &result)
 		if err != nil {
