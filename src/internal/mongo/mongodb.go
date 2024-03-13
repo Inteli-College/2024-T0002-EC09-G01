@@ -14,8 +14,9 @@ import (
 )
 
 func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
-	coll := client.Database("SmarTopia").Collection("measurements")
-
+	db := client.Database("SmarTopia")
+	
+	var coll *mongo.Collection
 	// fmt.Println(data["payload"])
 
 	payloadData := data["payload"].(map[string]interface{})
@@ -37,6 +38,8 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 		newData["sensor"] = gasesValues["sensor"]
 		newData["unit"] = gasesValues["unit"]
 
+		coll = db.Collection("gases") 
+
 	} else {
 		
 		radiationValues := payloadData["radiation-values"].(map[string]interface{})
@@ -52,7 +55,7 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 		newData["sensor"] = radiationValues["sensor"]
 		newData["unit"] = radiationValues["unit"]
 
-		fmt.Println(newData)
+		coll = db.Collection("radiation") 
 	}
 
 	bsonData, err := bson.Marshal(newData)
@@ -68,7 +71,7 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 
 func ConnectToMongo() *mongo.Client{
 	// Carregar variáveis de ambiente do arquivo .env
-	err := godotenv.Load("../.env")
+	err := godotenv.Load("../../config/.env")
 
 	if err != nil {
 		log.Fatal("Erro ao carregar o arquivo .env")
