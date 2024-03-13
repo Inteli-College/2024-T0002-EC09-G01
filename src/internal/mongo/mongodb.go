@@ -16,7 +16,46 @@ import (
 func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 	coll := client.Database("SmarTopia").Collection("measurements")
 
-	bsonData, err := bson.Marshal(data)
+	// fmt.Println(data["payload"])
+
+	payloadData := data["payload"].(map[string]interface{})
+
+	newData := make(map[string]interface{})
+
+	if payloadData["gases-values"] != nil {
+		
+		gasesValues := payloadData["gases-values"].(map[string]interface{})
+
+		newData["id"] = data["packet-id"]
+
+		newData["time"] = payloadData["current_time"]
+
+		for key, value := range gasesValues["gases-values"].(map[string]interface{}) {
+			newData[key] = value
+		}
+
+		newData["sensor"] = gasesValues["sensor"]
+		newData["unit"] = gasesValues["unit"]
+
+	} else {
+		
+		radiationValues := payloadData["radiation-values"].(map[string]interface{})
+
+		newData["id"] = data["packet-id"]
+
+		newData["time"] = payloadData["current_time"]
+
+		for key, value := range radiationValues["radiation-values"].(map[string]interface{}) {
+			newData[key] = value
+		}
+
+		newData["sensor"] = radiationValues["sensor"]
+		newData["unit"] = radiationValues["unit"]
+
+		fmt.Println(newData)
+	}
+
+	bsonData, err := bson.Marshal(newData)
 
 	result, err := coll.InsertOne(context.TODO(), bsonData)
 
@@ -29,7 +68,7 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 
 func ConnectToMongo() *mongo.Client{
 	// Carregar variáveis de ambiente do arquivo .env
-	err := godotenv.Load("../../config/.env")
+	err := godotenv.Load("../.env")
 
 	if err != nil {
 		log.Fatal("Erro ao carregar o arquivo .env")
