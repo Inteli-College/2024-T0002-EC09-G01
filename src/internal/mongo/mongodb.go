@@ -29,7 +29,7 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 
 func ConnectToMongo() *mongo.Client{
 	// Carregar variáveis de ambiente do arquivo .env
-	err := godotenv.Load("../.env")
+	err := godotenv.Load("../../config/.env")
 
 	if err != nil {
 		log.Fatal("Erro ao carregar o arquivo .env")

@@ -1,7 +1,7 @@
 package main
 
 import (
-	mongo "2024-T0002-EC09-G01/src/database-api/mongo"
+	mongo "2024-T0002-EC09-G01/src/internal/mongo"
 	consumerKafka "2024-T0002-EC09-G01/src/internal/kafka"
 	"encoding/json"
 	"fmt"
@@ -15,7 +15,7 @@ func main() {
 
 	client := mongo.ConnectToMongo()
 
-	err := godotenv.Load("../.env")
+	err := godotenv.Load("../../config/.env")
 	if err != nil {
 		fmt.Printf("Error loading .env file: %s", err)
 	}

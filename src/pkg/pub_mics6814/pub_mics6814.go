@@ -1,7 +1,7 @@
 package pub_mics6814
 
 import (
-	MICS6814 "2024-T0002-EC09-G01/src/internal/mics6814"
+	MICS6814 "2024-T0002-EC09-G01/src/internal/sensors/mics6814"
 	"encoding/json"
 	"fmt"
 	"strconv"

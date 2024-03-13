@@ -1,7 +1,7 @@
 package pub_rxwlib900
 
 import (
-	RXWLIB900 "2024-T0002-EC09-G01/src/internal/rxwlib900"
+	RXWLIB900 "2024-T0002-EC09-G01/src/internal/sensors/rxwlib900"
 	"encoding/json"
 	"fmt"
 	"strconv"
