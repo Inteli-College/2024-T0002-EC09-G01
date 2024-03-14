@@ -10,7 +10,7 @@ type MaxMin struct {
 	MaxValue float64 `json:"max_value"`
 	MinValue float64 `json:"min_value"`
 }
-
+//adolfo by Luca
 func RandomValues(rangeValues map[string]MaxMin, gas string) float64 {
 	rand.Seed(time.Now().UnixNano()) // Inicializa a semente do gerador de números aleatórios
 

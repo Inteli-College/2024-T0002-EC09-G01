@@ -1,35 +1,36 @@
 version: '3.8'
 
 services:
-
+  
   metabase:
-    image: metabase/metabase
+    image: metabase/metabase:latest
+    container_name: metabase
     ports:
       - "3000:3000"
-    container_name: metabase
     volumes:
-      - ./database-api:/project
+      - "${CURRENTDIR}/dashboard/metabase-data:/metabase-data"
+      - "${CURRENTDIR}/database:/database"
 
-  # simulation:
-  #   image: golang:latest
-  #   container_name: simulation
-  #   volumes:
-  #     - ./:/app
-  #   command: /bin/bash -c "cd /app && go mod tidy && go mod download && go build -o simulation ./cmd/simulation.go && ./simulation"
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '0.5'
-  #         memory: 512M
-
-  # subscribe:
-  #   image: golang:latest
-  #   container_name: subscribe
-  #   volumes:
-  #     - ./:/app
-  #   command: /bin/bash -c "cd /app && go mod tidy && go mod download && go build -o simulation ./database-api/database.go && ./database"
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '0.5'
-  #         memory: 512M
+  simulation:
+    image: golang:alpine
+    container_name: simulation
+    volumes:
+      - ./:/app
+    command: sh -c "cd /app && go mod tidy && go build -o simulation ./cmd/simulation.go && ./simulation"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+  
+  subscribe:
+    image: golang:alpine
+    container_name: subscribe
+    volumes:
+      - ./:/app
+    command: sh -c "cd /app && go mod tidy && go build -o subscribe ./database-api/app.go && ./subscribe"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M

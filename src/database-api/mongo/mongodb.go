@@ -18,6 +18,10 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 
 	bsonData, err := bson.Marshal(data)
 
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	result, err := coll.InsertOne(context.TODO(), bsonData)
 
 	if err != nil {
@@ -29,7 +33,7 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 
 func ConnectToMongo() *mongo.Client{
 	// Carregar variáveis de ambiente do arquivo .env
-	err := godotenv.Load("../.env")
+	err := godotenv.Load("../../.env")
 
 	if err != nil {
 		log.Fatal("Erro ao carregar o arquivo .env")
