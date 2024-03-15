@@ -88,7 +88,7 @@ func getradiation(c *gin.Context) {
     c.IndentedJSON(http.StatusOK, GetInRadiation())
 }
 
-func main() {
+func api() {
     CreateTable()
     router := gin.Default()
     router.POST("/sensors", postsensor)

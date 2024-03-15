@@ -185,7 +185,7 @@ func catchErrors(err error) {
 }
 
 var DatabaseHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-	// fmt.Printf("Received: %s on topic %s\n", msg.Payload(), msg.Topic())
+	fmt.Printf("Received: %s on topic %s\n", msg.Payload(), msg.Topic())
 
 	var data map[string]interface{}
 
@@ -193,7 +193,7 @@ var DatabaseHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Mess
 
 	catchErrors(err)
 
-	// fmt.Println(data["payload"])
+	fmt.Println(data["payload"])
 
 	payloadData := data["payload"].(map[string]interface{})
 
@@ -291,7 +291,7 @@ func main() {
 	db, err := sql.Open("sqlite3", "./database.db")	
 
 	catchErrors(err)
-
+database-api/mongo database-api/app.go
 	
 	ConnectToDatabase("sqlite3", "./database.db")
 	

@@ -12,11 +12,11 @@ services:
       - "${CURRENTDIR}/database:/database"
 
   simulation:
-    image: golang:alpine
+    image: golang:latest
     container_name: simulation
     volumes:
       - ./:/app
-    command: sh -c "cd /app && go mod tidy && go build -o simulation ./cmd/simulation.go && ./simulation"
+    command: /bin/bash -c "cd /app && go mod tidy && go build -o simulation ./cmd/simulation.go && ./simulation"
     deploy:
       resources:
         limits:
@@ -24,11 +24,11 @@ services:
           memory: 512M
   
   subscribe:
-    image: golang:alpine
+    image: golang:latest
     container_name: subscribe
     volumes:
       - ./:/app
-    command: sh -c "cd /app && go mod tidy && go build -o subscribe ./database-api/app.go && ./subscribe"
+    command: /bin/bash -c "cd /app && go mod tidy && go build -o subscribe ./database-mongo/app.go && ./subscribe"
     deploy:
       resources:
         limits:

@@ -64,6 +64,6 @@ func Controller(id int) {
 			fmt.Printf("Published message in %s: %s\n", topic, payload)
 		}
 
-		time.Sleep(2 * time.Second)
+		time.Sleep(30 * time.Second)
 	}
 }
