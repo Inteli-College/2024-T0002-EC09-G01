@@ -1,8 +1,6 @@
 package main
 
 import (
-	// MICS6814 "2024-T0002-EC09-G01/src/pkg/pub_mics6814"
-	// RXWLIB900 "2024-T0002-EC09-G01/src/pkg/pub_rxwlib900"
 	Controller "2024-T0002-EC09-G01/src/pkg/controller"
 	"sync"
 )

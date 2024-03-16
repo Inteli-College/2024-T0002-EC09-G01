@@ -1,1 +1,0 @@
-For now, tests are within the same directory for Go src packages.

@@ -1,7 +1,7 @@
 package rxwlib900
 
 import (
-	Common "2024-T0002-EC09-G01/src/internal/common"
+	Common "2024-T0002-EC09-G01/src/internal/sensors/common"
 )
 
 type RadiationValues struct {

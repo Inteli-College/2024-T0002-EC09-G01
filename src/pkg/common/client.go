@@ -24,7 +24,7 @@ func CreateClient(id string, callback_handler mqtt.MessageHandler) mqtt.Client {
 	password := os.Getenv("HIVE_PSWD")
 
 	if username == "" || password == "" {
-		err := godotenv.Load("../.env")
+		err := godotenv.Load("../../config/.env")
 		if err != nil {
 			fmt.Printf("\nError loading .env file. error: %s\n", err)
 		}
