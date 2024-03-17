@@ -4,7 +4,7 @@ title: Apresentação - Sprint 3
 sidebar_position: 7
 ---
 
-# Apresentação Sprint 2
+# Apresentação Sprint 3
 
 Nesta sprint, focamos no entendimento do problema, focando nos itens:
 
