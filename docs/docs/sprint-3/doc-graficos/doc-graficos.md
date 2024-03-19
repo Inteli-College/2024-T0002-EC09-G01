@@ -1,3 +1,7 @@
+---
+label: Gráficos
+---
+
 # Planejamento da interface gráfica da solução 
 
 ## Prototipação da interface
@@ -7,18 +11,18 @@ Acima desses gráficos estariam algumas regiões agrupadas por uma condicional, 
 
 ## Versão antiga
 
-<img src={require('/img/VersaoAntiga.png).default} width='100%'/>
-<sub>
+<img src={require('/img/VersaoAntiga.png').default} width='100%'/>
+<sub>Versão antiga</sub>
 
 ## Versão final da prototipação
 
 <img src={require('/img/prototipoVersaoAtual.png').default} width='100%'/>
-<sub>
+<sub>Versão Sprint 3</sub>
 
 ## Versão atualizada
 
 <img src={require('/img/versaoAtual.png').default} width='100%'/>
-<sub>
+<sub>Atualização </sub>
 
 ## Explicação da escolhas dos gráficos
 
