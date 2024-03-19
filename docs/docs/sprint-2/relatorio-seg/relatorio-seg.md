@@ -7,6 +7,7 @@ Avaliação de Segurança
 ## 1. Autenticação Simples
 
 O broker HIVEMQ utiliza um sistema de autenticação simples, onde senhas podem ser consideradas uma potencial vulnerabilidade. A autenticação é uma parte crucial da segurança do sistema e deve ser abordada com cuidado. Recomenda-se a implementação de práticas de autenticação mais robustas, como o uso de senhas fortes e autenticação de dois fatores (2FA), para garantir uma camada adicional de segurança.
+
 ## 2. Vulnerabilidades Relacionadas à Disponibilidade
 
 Durante a avaliação, identificou-se a ausência de tratativas para ataques relacionados à disponibilidade do sistema. Recomenda-se a implementação de medidas preventivas, como controle de acesso adequado, limitação de tentativas de conexão e monitoramento proativo para detectar e responder a possíveis ataques de negação de serviço (DDoS) ou outras ameaças que possam impactar a disponibilidade do sistema.
