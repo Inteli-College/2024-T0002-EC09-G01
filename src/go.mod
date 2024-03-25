@@ -7,7 +7,6 @@ require (
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/gin-gonic/gin v1.9.1
 	github.com/joho/godotenv v1.5.1
-	github.com/mattn/go-sqlite3 v1.14.22
 	go.mongodb.org/mongo-driver v1.14.0
 )
 
