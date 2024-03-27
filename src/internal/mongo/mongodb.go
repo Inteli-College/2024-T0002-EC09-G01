@@ -6,78 +6,49 @@ import (
 	"log"
 	"os"
 	"encoding/json"
-
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-
 type Sensors struct {
-	ID         string `json:"_id"`
-	Latitude   float32 `json:"latitude"`
-	Longitude  float32 `json:"longitude"`
-	Name       string `json:"name"`
-	SensorType string `json:"sensorType"`
+	ID        string `json:"_id"`
+	Latitude  float32 `json:"latitude"`
+	Longitude float32 `json:"longitude"`
+	Name      string `json:"name"`
+	SensorTyoe string `json:"sensorType"`
 }
 
-
-func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
+func InsertIntoMongo(data map[string]interface{}) {
+	client := ConnectToMongo()
 	db := client.Database("SmarTopia")
-	
-	var coll *mongo.Collection
-	// fmt.Println(data["payload"])
+	coll := db.Collection("teste-gases")
 
-	payloadData := data["payload"].(map[string]interface{})
-
-	newData := make(map[string]interface{})
-
-	if payloadData["gases-values"] != nil {
-		
-		gasesValues := payloadData["gases-values"].(map[string]interface{})
-
-		newData["id"] = data["packet-id"]
-
-		newData["time"] = payloadData["current_time"]
-
-		for key, value := range gasesValues["gases-values"].(map[string]interface{}) {
-			newData[key] = value
+	for key, value := range data {
+		// Codifique o valor em JSON
+		encodedJSON, err := json.Marshal(value)
+		if err != nil {
+			fmt.Printf("Erro ao codificar JSON para %s: %s\n", key, err)
+			continue
 		}
 
-		newData["sensor"] = gasesValues["sensor"]
-		newData["unit"] = gasesValues["unit"]
-
-		coll = db.Collection("gases") 
-
-	} else {
-		
-		radiationValues := payloadData["radiation-values"].(map[string]interface{})
-
-		newData["id"] = data["packet-id"]
-
-		newData["time"] = payloadData["current_time"]
-
-		for key, value := range radiationValues["radiation-values"].(map[string]interface{}) {
-			newData[key] = value
+		// Decodifique o JSON em um mapa vazio
+		var doc map[string]interface{}
+		if err := json.Unmarshal(encodedJSON, &doc); err != nil {
+			fmt.Printf("Erro ao decodificar JSON para %s: %s\n", key, err)
+			continue
 		}
 
-		newData["sensor"] = radiationValues["sensor"]
-		newData["unit"] = radiationValues["unit"]
+		// Insira o documento no MongoDB
+		if _, err := coll.InsertOne(context.TODO(), doc); err != nil {
+			log.Fatal(err)
+		}
 
-		coll = db.Collection("radiation") 
+		fmt.Printf("Documento inserido com sucesso para %s\n", key)
 	}
-
-	bsonData, err := bson.Marshal(newData)
-
-	result, err := coll.InsertOne(context.TODO(), bsonData)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Printf("Inserted document with _id: %v\n", result.InsertedID)
 }
+
 
 func ConnectToMongo() *mongo.Client{
 	// Carregar variáveis de ambiente do arquivo .env
