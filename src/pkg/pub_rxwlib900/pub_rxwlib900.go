@@ -4,12 +4,11 @@ import (
 	RXWLIB900 "2024-T0002-EC09-G01/src/internal/sensors/rxwlib900"
 	"encoding/json"
 	"fmt"
-	"strconv"
-	"time"
+`	"time"
 )
 
 type PublishPacketRadiation struct {
-	PacketId   int               `json:"packet-id"`
+	PacketId   string            `json:"packet-id"`
 	TopicName  string            `json:"topic-name"`
 	Qos        int               `json:"qos"`
 	RetainFlag bool              `json:"retain-flag"`
@@ -30,7 +29,7 @@ func (s *PublishPacketRadiation) ToJSON() (string, error) {
 	return string(jsonData), nil
 }
 
-func CreatePayloadRadiation(id int) string {
+func CreatePayloadRadiation(id string) string {
 	senddata := SendRadiationData{
 		CurrentTime:   time.Now(),
 		RadiationData: RXWLIB900.CreateGasesValues(),
@@ -38,7 +37,7 @@ func CreatePayloadRadiation(id int) string {
 
 	publishpacket := PublishPacketRadiation{
 		PacketId:   id,
-		TopicName:  fmt.Sprintf("sensor/radiation/%s", strconv.Itoa(id)),
+		TopicName:  fmt.Sprintf("sensor/radiation/%s", id),
 		Qos:        1,
 		RetainFlag: false,
 		Payload:    senddata,
