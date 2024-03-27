@@ -30,7 +30,7 @@ func GetonMongo(client *mongo.Client) []Sensor {
 	return sensors
 }
 
-func InsertIntoMongo(client *mongo.Client, data string, collection string) string {
+func InsertIntoMongo(client *mongo.Client, data interface{}, collection string) string {
 	db := client.Database("SmarTopia")
 	
 	coll := db.Collection(collection)

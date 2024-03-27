@@ -36,9 +36,7 @@ func postsensor(c *gin.Context) {
 
 	client := ConnectToMongo()
 
-    stringData := fmt.Sprintf("%v", data)
-
-    c.IndentedJSON(http.StatusCreated, InsertIntoMongo(client, stringData, "sensors"))
+    c.IndentedJSON(http.StatusCreated, InsertIntoMongo(client, data, "sensors"))
 }
 
 // getsensors responds with the list of all sensors as JSON.
@@ -58,9 +56,7 @@ func postalert(c *gin.Context) {
 
     client := ConnectToMongo()
 
-    stringData := fmt.Sprintf("%v", data)
-
-    c.IndentedJSON(http.StatusCreated, InsertIntoMongo(client, stringData, "alerts"))
+    c.IndentedJSON(http.StatusCreated, InsertIntoMongo(client, data, "alerts"))
 }
 
 // getalerts responds with the list of all alerts as JSON.
