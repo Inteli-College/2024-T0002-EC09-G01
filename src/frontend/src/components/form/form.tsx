@@ -19,10 +19,12 @@ const Form: React.FC = () => {
     });
   };
 
+  const url:string = 'http://localhost:8000';
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch('/sensors', {
+      const response = await fetch(url+'/sensors', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json' // Assuming you're sending JSON data

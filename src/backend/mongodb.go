@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	// "encoding/json"
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
@@ -31,10 +30,10 @@ func GetonMongo(client *mongo.Client) []Sensor {
 	return sensors
 }
 
-func InsertIntoMongo(client *mongo.Client, data Sensor) {
+func InsertIntoMongo(client *mongo.Client, data string, collection string) string {
 	db := client.Database("SmarTopia")
 	
-	coll := db.Collection("sensors")
+	coll := db.Collection(collection)
 
 	bsonData, err := bson.Marshal(data)
 	if err != nil {
@@ -46,7 +45,7 @@ func InsertIntoMongo(client *mongo.Client, data Sensor) {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Inserted document with _id: %v\n", result.InsertedID)
+	return fmt.Sprintf("Inserted document with _id: %v\n", result.InsertedID)
 }
 
 func ConnectToMongo() *mongo.Client{
