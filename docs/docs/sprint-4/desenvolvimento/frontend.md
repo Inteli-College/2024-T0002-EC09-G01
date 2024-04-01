@@ -26,7 +26,7 @@ A fim de o usuário administrador pudesse criar nosso sensores e que os cidadão
 - **Formulário de Sensores**:
   - Permite ao usuário inserir dados de sensores, incluindo sensor, tipo, longitude e latitude.
 
-<img title="Table Schema" alt="Imagem representando as tabelas contidas no banco de dados" src={require('/img/sensorPage.png').default} />
+<img title="Table Schema" alt="Imagem representando as tabelas contidas no banco de dados" src={require('/img/sensorPage.jpeg').default} />
 
 - **Formulário de Alertas**:
   - Semelhante ao formulário de sensores, mas usado para inserir dados de alertas, incluindo alerta, tipo, longitude e latitude.

@@ -29,6 +29,7 @@ A fim de o usuário administrador pudesse criar nosso sensores e que os cidadão
 ## api.go
 
 ### Funcionalidades:
+
 1. **Configuração do Servidor HTTP:**
    - Configura o roteador Gin.
    - Habilita o CORS para permitir solicitações de origens múltiplas.
@@ -50,6 +51,6 @@ Esta documentação fornece uma visão geral das funcionalidades e estruturas de
 
 ## Lançando a aplicação
 Partindo a partir da pasta raiz:
-```
-go run src/backend/api.go
+```go
+run src/backend/api.go
 ```
