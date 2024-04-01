@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"strconv"
 	"time"
 
 	DefaultClient "2024-T0002-EC09-G01/src/pkg/common"
@@ -17,14 +16,14 @@ const (
 
 var topics = [2]string{"gases", "radiation"}
 
-func Topic(sensorType int, id int) string {
+func Topic(sensorType int, id string) string {
 
 	typeOfSensor := topics[sensorType]
-	topic := fmt.Sprintf("sensor/%s/%s", typeOfSensor, strconv.Itoa(id))
+	topic := fmt.Sprintf("sensor/%s/%s", typeOfSensor, id)
 	return topic
 }
 
-func Payload(sensorType int, id int) string {
+func Payload(sensorType int, id string) string {
 	if sensorType == gasesSensorType {
 		return pub_mics6814.CreatePayloadGases(id)
 	} else if sensorType == radiationSensorType {
@@ -35,8 +34,8 @@ func Payload(sensorType int, id int) string {
 
 
 
-func Controller(id int) {
-	client := DefaultClient.CreateClient(fmt.Sprintf("publisher-%s", strconv.Itoa(id)), DefaultClient.Handler)
+func Controller(id string) {
+	client := DefaultClient.CreateClient(fmt.Sprintf("publisher-%s", id), DefaultClient.Handler)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())

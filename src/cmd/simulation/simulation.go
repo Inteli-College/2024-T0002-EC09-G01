@@ -1,20 +1,27 @@
 package main
 
 import (
+	Mongo "2024-T0002-EC09-G01/src/internal/mongo"
 	Controller "2024-T0002-EC09-G01/src/pkg/controller"
+	"log"
 	"sync"
 )
 
 func main() {
-	var wg sync.WaitGroup
-	numControllersRad := 5 // ou o número desejado de controladores
 
-	for i := 1; i <= numControllersRad; i++ {
+	sensors, err := Mongo.GetAllSensors()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var wg sync.WaitGroup
+
+	for _, sensor := range sensors {
 		wg.Add(1)
-		go func(id int) {
+		go func(id string) {
 			defer wg.Done()
 			Controller.Controller(id)
-		}(i)
+		}(sensor.ID)
 	}
 
 	wg.Wait()

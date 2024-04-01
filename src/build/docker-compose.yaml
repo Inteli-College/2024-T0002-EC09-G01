@@ -4,8 +4,8 @@ services:
     image: metabase/metabase:latest
     ports:
       - "3000:3000"
-    volumes:
-      - ./metabase-data:/metabase.db  
+    env_file:
+      - ../config/.env
     restart: always
 
 

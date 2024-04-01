@@ -1,0 +1,75 @@
+/* Style for the blue bar */
+.header {
+  background-color: #007bff; 
+  color: #fff;
+  padding: 20px 0; /* Increased padding to make the bar thicker */
+}
+
+/* Style for the overall container */
+body, .App {
+  height: 100%;
+  margin: 0;
+}
+
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Style for the form container */
+.form-container {
+  width: 100%;
+  max-width: 600px; /* Adjust the max-width as needed */
+  padding: 40px; /* Increased padding to match the top bar */
+  margin-top: 40px; /* Add margin to create space between the top bar and form */
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Align children vertically */
+  justify-content: center; /* Center vertically */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+}
+
+/* Style for the heading */
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center; /* Center the text horizontally */
+}
+
+/* Style for the form elements */
+.form-group {
+  margin-bottom: 20px; /* Adjust the space between form elements */
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type='text'],
+input[type='number'],
+select {
+  width: calc(100% - 20px); /* Adjust the width as needed */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  margin-bottom: 10px; /* Adjust the space between input fields */
+}
+
+button {
+  background-color: #007bff; /* Blue color */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
