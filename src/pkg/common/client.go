@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	tls "2024-T0002-EC09-G01/src/pkg/tlsConfig"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	godotenv "github.com/joho/godotenv"
 )
@@ -23,6 +24,8 @@ func CreateClient(id string, callback_handler mqtt.MessageHandler) mqtt.Client {
 	username := os.Getenv("HIVE_USER")
 	password := os.Getenv("HIVE_PSWD")
 
+	tlsconfig := tls.NewTLSConfig()
+
 	if username == "" || password == "" {
 		err := godotenv.Load("../../config/.env")
 		if err != nil {
@@ -38,6 +41,11 @@ func CreateClient(id string, callback_handler mqtt.MessageHandler) mqtt.Client {
 	opts.SetDefaultPublishHandler(callback_handler)
 	opts.SetUsername(username)
 	opts.SetPassword(password)
+	opts.SetClientID("ssl-sample").SetTLSConfig(tlsconfig)
 
 	return mqtt.NewClient(opts)
+}
+
+func NewTLSConfig() {
+	panic("unimplemented")
 }
