@@ -61,16 +61,9 @@ const Form: React.FC = () => {
       />  
       <Input
         type="text"
-        name="longitude"
-        placeholder="longitude"
+        name="address"
+        placeholder="endereço"
         value={formData.longitude}
-        onChange={handleChange}
-      />
-      <Input
-        type="text"
-        name="latitude"
-        placeholder="latitude"
-        value={formData.latitude}
         onChange={handleChange}
       />
       <Button type="submit">Submit</Button>
