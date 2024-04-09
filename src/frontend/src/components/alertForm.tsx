@@ -59,9 +59,16 @@ const AlertForm: React.FC = () => {
         />
         <Input
             type="text"
-            name="address"
-            placeholder="endereço"
+            name="longitude"
+            placeholder="longitude"
             value={formData.longitude}
+            onChange={handleChange}
+        />
+        <Input
+            type="text"
+            name="latitude"
+            placeholder="latitude"
+            value={formData.latitude}
             onChange={handleChange}
         />
         <Button type="submit">Submit Alerta</Button>
