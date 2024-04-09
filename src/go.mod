@@ -7,6 +7,8 @@ require (
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/gin-contrib/cors v1.7.1
 	github.com/gin-gonic/gin v1.9.1
+	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/gorilla/mux v1.8.1
 	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.14.0
 )
