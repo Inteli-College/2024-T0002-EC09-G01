@@ -18,11 +18,15 @@ func main() {
     router.Use(cors.New(config))
 
     router.POST("/login", jwtoken.LoginHandler)
-	router.GET("/protected", jwtoken.AuthMiddleware())
-    router.GET("/sensors", getsensors)
-    router.POST("/sensors", postsensor)
-    router.GET("/alerts", getalerts)
-    router.POST("/alerts", postalert)
+
+	protected := router.Group("")
+    protected.Use(jwtoken.AuthMiddleware())
+    {
+        protected.GET("/sensors", getsensors)
+        protected.POST("/sensors", postsensor)
+        protected.GET("/alerts", getalerts)
+        protected.POST("/alerts", postalert)
+    }
 
     port := ":8000"
     fmt.Printf("Server will run on http://localhost%s\n", port)
