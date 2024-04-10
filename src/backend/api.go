@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+    jwtoken "2024-T0002-EC09-G01/src/jwtoken"
+
 	"github.com/gin-gonic/gin"
     "github.com/gin-contrib/cors"
 )
@@ -15,6 +17,8 @@ func main() {
     config.AllowOrigins = []string{"*"}
     router.Use(cors.New(config))
 
+    router.POST("/login", jwtoken.LoginHandler)
+	router.GET("/protected", jwtoken.AuthMiddleware())
     router.GET("/sensors", getsensors)
     router.POST("/sensors", postsensor)
     router.GET("/alerts", getalerts)
