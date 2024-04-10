@@ -4,12 +4,11 @@ import (
 	MICS6814 "2024-T0002-EC09-G01/src/internal/sensors/mics6814"
 	"encoding/json"
 	"fmt"
-	"strconv"
 	"time"
 )
 
 type PublishPacketGases struct {
-	PacketId   int           `json:"packet-id"`
+	PacketId   string        `json:"packet-id"`
 	TopicName  string        `json:"topic-name"`
 	Qos        int           `json:"qos"`
 	RetainFlag bool          `json:"retain-flag"`
@@ -30,15 +29,15 @@ func (s *PublishPacketGases) ToJSON() (string, error) {
 	return string(jsonData), nil
 }
 
-func CreatePayloadGases(id int) string {
+func CreatePayloadGases(id string) string {
 	senddata := SendGasesData{
-		CurrentTime:   time.Now(),
-		GasesData: MICS6814.CreateGasesValues(),
+		CurrentTime: time.Now(),
+		GasesData:   MICS6814.CreateGasesValues(),
 	}
 
 	publishpacket := PublishPacketGases{
 		PacketId:   id,
-		TopicName:  fmt.Sprintf("sensor/gases/%s", strconv.Itoa(id)),
+		TopicName:  fmt.Sprintf("sensor/gases/%s", id),
 		Qos:        1,
 		RetainFlag: false,
 		Payload:    senddata,
@@ -48,4 +47,3 @@ func CreatePayloadGases(id int) string {
 	payload, _ := publishpacket.ToJSON()
 	return payload
 }
-

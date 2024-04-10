@@ -5,13 +5,23 @@ import (
 	"fmt"
 	"log"
 	"os"
-	// "encoding/json"
+	"encoding/json"
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+
+type Sensors struct {
+	ID         string `json:"_id"`
+	Latitude   float32 `json:"latitude"`
+	Longitude  float32 `json:"longitude"`
+	Name       string `json:"name"`
+	SensorType string `json:"sensorType"`
+}
+
 
 func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 	db := client.Database("SmarTopia")
@@ -69,9 +79,9 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 	fmt.Printf("Inserted document with _id: %v\n", result.InsertedID)
 }
 
-func ConnectToMongo() *mongo.Client{
+func ConnectToMongo(path string) *mongo.Client{
 	// Carregar variáveis de ambiente do arquivo .env
-	err := godotenv.Load("../../config/.env")
+	err := godotenv.Load(path)
 
 	if err != nil {
 		log.Fatal("Erro ao carregar o arquivo .env")
@@ -92,4 +102,42 @@ func ConnectToMongo() *mongo.Client{
 	}
 
 	return client
+}
+
+func GetAllSensors(path string) ([]Sensors, error) {
+
+	client := ConnectToMongo(path)
+	collection := client.Database("SmarTopia").Collection("sensors")
+
+	cursor, err := collection.Find(context.TODO(), bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.TODO())
+
+	var sensors []Sensors
+	for cursor.Next(context.TODO()) {
+
+		var doc bson.M
+		err := cursor.Decode(&doc)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		jsonData, err := json.MarshalIndent(doc, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var sensor Sensors
+		err = json.Unmarshal(jsonData, &sensor)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		sensors = append(sensors, sensor)
+	}
+
+	fmt.Print(sensors)
+	return sensors, nil
 }
