@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	sensors, err := Mongo.GetAllSensors()
+	sensors, err := Mongo.GetAllSensors("../../config/.env")
 	if err != nil {
 		log.Fatal(err)
 	}

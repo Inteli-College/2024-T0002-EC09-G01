@@ -79,9 +79,9 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 	fmt.Printf("Inserted document with _id: %v\n", result.InsertedID)
 }
 
-func ConnectToMongo() *mongo.Client{
+func ConnectToMongo(path string) *mongo.Client{
 	// Carregar variáveis de ambiente do arquivo .env
-	err := godotenv.Load("../../config/.env")
+	err := godotenv.Load(path)
 
 	if err != nil {
 		log.Fatal("Erro ao carregar o arquivo .env")
@@ -104,9 +104,9 @@ func ConnectToMongo() *mongo.Client{
 	return client
 }
 
-func GetAllSensors() ([]Sensors, error) {
+func GetAllSensors(path string) ([]Sensors, error) {
 
-	client := ConnectToMongo()
+	client := ConnectToMongo(path)
 	collection := client.Database("SmarTopia").Collection("sensors")
 
 	cursor, err := collection.Find(context.TODO(), bson.D{})

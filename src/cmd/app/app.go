@@ -13,7 +13,7 @@ import (
 
 func main() {
 
-	client := mongo.ConnectToMongo()
+	client := mongo.ConnectToMongo("../../config/.env")
 
 	err := godotenv.Load("../../config/.env")
 	if err != nil {

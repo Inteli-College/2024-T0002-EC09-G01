@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+    jwt "2024-T0002-EC09-G01/src/jwt"
+
 	"github.com/gin-gonic/gin"
     "github.com/gin-contrib/cors"
 )
@@ -15,10 +17,16 @@ func main() {
     config.AllowOrigins = []string{"*"}
     router.Use(cors.New(config))
 
-    router.GET("/sensors", getsensors)
-    router.POST("/sensors", postsensor)
-    router.GET("/alerts", getalerts)
-    router.POST("/alerts", postalert)
+    router.POST("/login", jwt.LoginHandler)
+
+	protected := router.Group("")
+    protected.Use(jwt.AuthMiddleware())
+    {
+        protected.GET("/sensors", getsensors)
+        protected.POST("/sensors", postsensor)
+        protected.GET("/alerts", getalerts)
+        protected.POST("/alerts", postalert)
+    }
 
     port := ":8000"
     fmt.Printf("Server will run on http://localhost%s\n", port)

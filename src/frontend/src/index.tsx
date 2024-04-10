@@ -1,26 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import Button from './components/form/button';
-import AlertPage from './alertPage';
-
-const handleSubmit = () => {
-  ReactDOM.render(
-    <React.StrictMode>
-      <header className="header">
-        <Button onClick={(handleSubmit)}> Voltar </Button>
-      </header>
-      <AlertPage />
-    </React.StrictMode>,
-    document.getElementById('root')  );
-};
+import LoginPage from './loginPage';
 
 ReactDOM.render(
   <React.StrictMode>
-    <header className="header">
-      <Button onClick={(handleSubmit)}> Alertas </Button>
-    </header>
-    <App />
+    <header className="header"></header>
+    <LoginPage />
   </React.StrictMode>,
   document.getElementById('root')
 );
