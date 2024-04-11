@@ -2,10 +2,10 @@ package mongo
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-	"encoding/json"
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,19 +13,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-
 type Sensors struct {
-	ID         string `json:"_id"`
-	Latitude   float32 `json:"latitude"`
-	Longitude  float32 `json:"longitude"`
+	ID string `json:"_id"`
+	// Latitude   float32 `json:"latitude"`
+	// Longitude  float32 `json:"longitude"`
 	Name       string `json:"name"`
 	SensorType string `json:"sensorType"`
 }
 
-
 func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 	db := client.Database("SmarTopia")
-	
+
 	var coll *mongo.Collection
 	// fmt.Println(data["payload"])
 
@@ -34,7 +32,7 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 	newData := make(map[string]interface{})
 
 	if payloadData["gases-values"] != nil {
-		
+
 		gasesValues := payloadData["gases-values"].(map[string]interface{})
 
 		newData["id"] = data["packet-id"]
@@ -48,10 +46,10 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 		newData["sensor"] = gasesValues["sensor"]
 		newData["unit"] = gasesValues["unit"]
 
-		coll = db.Collection("gases") 
+		coll = db.Collection("gases")
 
 	} else {
-		
+
 		radiationValues := payloadData["radiation-values"].(map[string]interface{})
 
 		newData["id"] = data["packet-id"]
@@ -65,7 +63,7 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 		newData["sensor"] = radiationValues["sensor"]
 		newData["unit"] = radiationValues["unit"]
 
-		coll = db.Collection("radiation") 
+		coll = db.Collection("radiation")
 	}
 
 	bsonData, err := bson.Marshal(newData)
@@ -79,7 +77,7 @@ func InsertIntoMongo(client *mongo.Client, data map[string]interface{}) {
 	fmt.Printf("Inserted document with _id: %v\n", result.InsertedID)
 }
 
-func ConnectToMongo(path string) *mongo.Client{
+func ConnectToMongo(path string) *mongo.Client {
 	// Carregar variáveis de ambiente do arquivo .env
 	err := godotenv.Load(path)
 
