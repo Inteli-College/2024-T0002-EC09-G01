@@ -10,26 +10,45 @@ services:
     volumes:
       - ./database-api:/project
 
-  # simulation:
-  #   image: golang:latest
-  #   container_name: simulation
-  #   volumes:
-  #     - ./:/app
-  #   command: /bin/bash -c "cd /app && go mod tidy && go mod download && go build -o simulation ./cmd/simulation.go && ./simulation"
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '0.5'
-  #         memory: 512M
+  simulation:
+    image: golang:latest
+    container_name: simulation
+    volumes:
+      - ./:/app
+    command: /bin/bash -c "cd /app && go mod tidy && go mod download && go build -o simulation ./cmd/simulation/simulation.go"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
 
-  # subscribe:
-  #   image: golang:latest
-  #   container_name: subscribe
-  #   volumes:
-  #     - ./:/app
-  #   command: /bin/bash -c "cd /app && go mod tidy && go mod download && go build -o simulation ./database-api/database.go && ./database"
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '0.5'
-  #         memory: 512M
+  kafka:
+    image: golang:latest
+    container_name: kafka
+    volumes:
+      - ./:/app
+    command: /bin/bash -c "cd /app && go mod tidy && go mod download && go build -o app ./cmd/app/app.go"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "8000:8000"
+    expose:
+        - 8000
+        
+  backend:
+    image: golang:latest
+    container_name: backend
+    volumes: 
+      - ./:/app
+    command: /bin/bash -c "cd /app && go mod tidy && go mod download && cd /app/backend && go run ."
